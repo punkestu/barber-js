@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JetClientState">
+    <option name="draftsState">
+      <draftsState>
+        <option name="requests">
+          <list>
+            <requestState>
+              <option name="body">
+                <bodyState>
+                  <option name="raw" value="{&#10;  &quot;name&quot;: &quot;test&quot;,&#10;  &quot;email&quot;: &quot;test123@mail.com&quot;,&#10;  &quot;password&quot;: &quot;test1234&quot;&#10;}" />
+                  <option name="type" value="JSON" />
+                </bodyState>
+              </option>
+              <option name="headers">
+                <list>
+                  <headerState>
+                    <option name="key" value="Content-Type" />
+                    <option name="value" value="application/json" />
+                  </headerState>
+                </list>
+              </option>
+              <option name="id" value="70e34b6c-4c58-40fc-85cb-ed501ca8c3fe" />
+              <option name="method" value="POST" />
+              <option name="name" value="register" />
+              <option name="url" value="http://localhost:3000/person/registration" />
+            </requestState>
+            <requestState>
+              <option name="body">
+                <bodyState>
+                  <option name="raw" value="{&#10;  &quot;email&quot;: &quot;test12@mail.com&quot;,&#10;  &quot;password&quot;: &quot;test12345&quot;&#10;}" />
+                  <option name="type" value="JSON" />
+                </bodyState>
+              </option>
+              <option name="headers">
+                <list>
+                  <headerState>
+                    <option name="key" value="Content-Type" />
+                    <option name="value" value="application/json" />
+                  </headerState>
+                </list>
+              </option>
+              <option name="id" value="f0632bf0-11b3-4096-8a30-49f89d8fe2bb" />
+              <option name="method" value="POST" />
+              <option name="name" value="login" />
+              <option name="url" value="http://localhost:3000/person/auth" />
+            </requestState>
+          </list>
+        </option>
+      </draftsState>
+    </option>
+    <option name="id" value="8610ebf0-2452-4cfd-834a-bda5b75caaea" />
+  </component>
+</project>
