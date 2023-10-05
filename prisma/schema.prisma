@@ -24,3 +24,22 @@ model Role {
   role   String   @unique @db.VarChar(10)
   Person Person[]
 }
+
+enum Day {
+  SUN
+  MON
+  TUE
+  WED
+  THU
+  FRI
+  SAT
+}
+
+model Shift {
+  id    Int      @id @default(autoincrement())
+  start DateTime @db.Time()
+  end   DateTime @db.Time()
+  day   Day
+
+  @@unique([day, start])
+}

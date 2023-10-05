@@ -49,6 +49,84 @@
         </option>
       </draftsState>
     </option>
+    <option name="folders">
+      <list>
+        <folderState>
+          <option name="id" value="00bb2dc3-bff0-48cc-875a-bc220cddbdef" />
+          <option name="name" value="shift" />
+          <option name="requests">
+            <list>
+              <requestState>
+                <option name="body">
+                  <bodyState>
+                    <option name="raw" value="{&#10;  &quot;start&quot;: &quot;12:00&quot;,&#10;  &quot;end&quot;: &quot;12:00&quot;,&#10;  &quot;day&quot;: &quot;MON&quot;&#10;}" />
+                    <option name="type" value="JSON" />
+                  </bodyState>
+                </option>
+                <option name="headers">
+                  <list>
+                    <headerState>
+                      <option name="key" value="Content-Type" />
+                      <option name="value" value="application/json" />
+                    </headerState>
+                  </list>
+                </option>
+                <option name="id" value="07a439eb-8a0b-4394-acf3-56e133b5ff2b" />
+                <option name="method" value="POST" />
+                <option name="name" value="Create" />
+                <option name="url" value="http://localhost:3000/shift" />
+              </requestState>
+              <requestState>
+                <option name="body">
+                  <bodyState>
+                    <option name="raw" value="{&#10;  &quot;id&quot;: 16,&#10;  &quot;start&quot;: &quot;15:00&quot;,&#10;  &quot;end&quot;: &quot;18:00&quot;,&#10;  &quot;day&quot;: &quot;MON&quot;&#10;}" />
+                    <option name="type" value="JSON" />
+                  </bodyState>
+                </option>
+                <option name="headers">
+                  <list>
+                    <headerState>
+                      <option name="key" value="Content-Type" />
+                      <option name="value" value="application/json" />
+                    </headerState>
+                  </list>
+                </option>
+                <option name="id" value="af53b2e9-9966-4d26-8a54-b3f7b33816c5" />
+                <option name="method" value="PUT" />
+                <option name="name" value="Update" />
+                <option name="url" value="http://localhost:3000/shift/" />
+              </requestState>
+              <requestState>
+                <option name="body">
+                  <bodyState>
+                    <option name="raw" value="{&#10;  &quot;id&quot;: 2&#10;}" />
+                    <option name="type" value="JSON" />
+                  </bodyState>
+                </option>
+                <option name="headers">
+                  <list>
+                    <headerState>
+                      <option name="key" value="Content-Type" />
+                      <option name="value" value="application/json" />
+                    </headerState>
+                  </list>
+                </option>
+                <option name="id" value="0e4c3a75-3e2c-4e84-b915-c711676df0f4" />
+                <option name="method" value="DELETE" />
+                <option name="name" value="Delete" />
+                <option name="url" value="http://localhost:3000/shift/" />
+              </requestState>
+            </list>
+          </option>
+          <option name="sortWeight" value="1000000" />
+          <option name="syncProperties">
+            <synchronizationPropertiesState>
+              <option name="folderPath" value="$PROJECT_DIR$/.jetclient" />
+            </synchronizationPropertiesState>
+          </option>
+        </folderState>
+      </list>
+    </option>
     <option name="id" value="8610ebf0-2452-4cfd-834a-bda5b75caaea" />
   </component>
 </project>
