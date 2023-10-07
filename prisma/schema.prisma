@@ -11,12 +11,13 @@ datasource db {
 }
 
 model Person {
-  id       Int    @id @default(autoincrement())
-  name     String @unique @db.VarChar(50)
-  email    String @unique @db.VarChar(64)
+  id       Int      @id @default(autoincrement())
+  name     String   @unique @db.VarChar(50)
+  email    String   @unique @db.VarChar(64)
   password String
   role_id  Int
-  role     Role   @relation(fields: [role_id], references: [id])
+  role     Role     @relation(fields: [role_id], references: [id])
+  Barber   Barber[]
 }
 
 model Role {
@@ -36,10 +37,20 @@ enum Day {
 }
 
 model Shift {
-  id    Int      @id @default(autoincrement())
-  start DateTime @db.Time()
-  end   DateTime @db.Time()
-  day   Day
+  id     Int      @id @default(autoincrement())
+  start  DateTime @db.Time()
+  end    DateTime @db.Time()
+  day    Day
+  Barber Barber[]
 
   @@unique([day, start])
+}
+
+model Barber {
+  id        Int     @id @default(autoincrement())
+  barber_id Int
+  barber    Person  @relation(fields: [barber_id], references: [id])
+  shift_id  Int
+  shift     Shift   @relation(fields: [shift_id], references: [id])
+  active    Boolean @default(true)
 }
