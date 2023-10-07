@@ -1,4 +1,3 @@
-const {shift, person} = require("../lib/prisma");
 const {Model} = require("./model");
 
 class Barber extends Model{
