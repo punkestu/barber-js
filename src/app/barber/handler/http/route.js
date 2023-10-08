@@ -1,7 +1,7 @@
-module.exports = function (handler) {
+module.exports = function (handler, authMid) {
     const router = require("express").Router();
-    router.post("/", handler.RegisterShift);
-    router.delete("/", handler.DropShift);
-    router.put("/", handler.ToggleShift);
+    router.post("/", authMid.isAuth, authMid.isAdmin, handler.RegisterShift);
+    router.delete("/", authMid.isAuth, authMid.isAdmin, handler.DropShift);
+    router.put("/", authMid.isAuth, authMid.isAdmin, handler.ToggleShift);
     return router;
 }
