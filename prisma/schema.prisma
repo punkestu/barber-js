@@ -15,15 +15,14 @@ model Person {
   name     String   @unique @db.VarChar(50)
   email    String   @unique @db.VarChar(64)
   password String
-  role_id  Int
-  role     Role     @relation(fields: [role_id], references: [id])
+  role     Role
   Barber   Barber[]
 }
 
-model Role {
-  id     Int      @id @default(autoincrement())
-  role   String   @unique @db.VarChar(10)
-  Person Person[]
+enum Role {
+  CLIENT
+  BARBER
+  ADMIN
 }
 
 enum Day {

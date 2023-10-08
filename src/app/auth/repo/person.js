@@ -1,32 +1,15 @@
 const {person: db} = require("../../../lib/prisma");
 const Person = require("../../../domain/person");
-const Barber = require("../../../domain/barber");
-
-function remap(data) {
-    return {
-        ...data,
-        role: data.role.role
-    }
-}
 
 class Repo {
     async Save(person) {
-        person.role = {
-            connectOrCreate: {
-                where: {role: person.role},
-                create: {role: person.role}
-            }
-        }
         let savedPerson;
         if (typeof person.id === "undefined") {
             savedPerson = await db.create({
                 data: person,
-                include: {
-                    role: true
-                }
             });
         }
-        return new Person(remap(savedPerson));
+        return new Person(savedPerson);
     }
 
     async LoadOne({id, name, email}, op = null) {

@@ -7,7 +7,6 @@ class Auth {
         this.#repo = repo;
     }
     async Register(name, email, password){
-        console.log((await this.#repo.Load({name})).length === 0);
         const validation = new Validator(
             {name, email},
             {
@@ -19,7 +18,7 @@ class Auth {
             console.log(validation.errors);
             throw validation.errors;
         }
-        const person = new Person({name,email,password,role:"client"});
+        const person = new Person({name,email,password,role:"CLIENT"});
         await person.EncryptPassword();
         return this.#repo.Save(person);
     }
