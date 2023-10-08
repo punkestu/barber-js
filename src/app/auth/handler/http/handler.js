@@ -1,6 +1,6 @@
 const Errors = require("validatorjs/src/errors");
 const {Sign} = require("../../../../lib/jwt");
-const Validator = require("validatorjs");
+const Validator = require("../../../../lib/validator");
 
 class Handler {
     #service;

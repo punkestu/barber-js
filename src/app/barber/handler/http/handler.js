@@ -1,9 +1,5 @@
-const Validator = require("validatorjs");
+const Validator = require("../../../../lib/validator");
 const Errors = require("validatorjs/src/errors");
-
-Validator.register("isInteger", (value) => {
-    return typeof value === 'number';
-}, ":attribute must be integer", null);
 
 class Handler {
     #service;
@@ -13,19 +9,19 @@ class Handler {
     }
 
     RegisterShift = async (req, res) => {
-        const {barberId, shiftId} = req.body;
+        const {barber_id, shift_id} = req.body;
         try {
             const validation = new Validator(
-                {barberId, shiftId},
+                {barber_id, shift_id},
                 {
-                    barberId: "required|isInteger",
-                    shiftId: "required|isInteger"
+                    barber_id: "required|isInteger",
+                    shift_id: "required|isInteger"
                 }
             );
             if (!validation.check()) {
                 throw validation.errors;
             }
-            const barber = await this.#service.RegisterShift(barberId, shiftId);
+            const barber = await this.#service.RegisterShift(barber_id, shift_id);
             res.status(201).json(barber);
         } catch (err) {
             if (err instanceof Errors) {

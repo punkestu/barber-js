@@ -1,12 +1,5 @@
-const Validator = require("validatorjs");
+const Validator = require("../../../lib/validator");
 const Person = require("../../../domain/person");
-
-Validator.register("not_used", (_, requirement)=>{
-    return !requirement;
-},":attribute is used", null);
-Validator.register("exists", (_, requirement)=>{
-    return requirement;
-}, ":attribute not exists", null);
 
 class Auth {
     #repo;
@@ -17,28 +10,29 @@ class Auth {
         const validation = new Validator(
             {name, email},
             {
-                name: [{"not_used": await this.#repo.LoadByName(name)}],
-                email: [{"not_used": await this.#repo.LoadByEmail(email)}]
+                name: [{"not_used": (await this.#repo.LoadOne({name}))}],
+                email: [{"not_used": (await this.#repo.LoadOne({email}))}]
             }
         );
         if(!validation.check()){
+            console.log(validation.errors);
             throw validation.errors;
         }
-        const person = new Person({name,email,password,role:"client"});
+        const person = new Person({name,email,password,role:"CLIENT"});
         await person.EncryptPassword();
         return this.#repo.Save(person);
     }
     async Auth(email, password) {
+        const person = await this.#repo.LoadOne({email});
         const validation = new Validator(
             {email},
             {
-                email: [{"exists": await this.#repo.LoadByEmail(email)}]
+                email: [{"exists": person}]
             }
         );
         if(!validation.check()){
             throw validation.errors;
         }
-        const person = await this.#repo.LoadByEmail(email);
         if(!(await person.VerifyPassword(password))){
             validation.errors.add("password", "password is wrong");
             throw validation.errors;
