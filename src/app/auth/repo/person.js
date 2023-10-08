@@ -1,5 +1,6 @@
 const {person: db} = require("../../../lib/prisma");
 const Person = require("../../../domain/person");
+const Barber = require("../../../domain/barber");
 
 function remap(data) {
     return {
@@ -27,26 +28,37 @@ class Repo {
         }
         return new Person(remap(savedPerson));
     }
-    async LoadByID(id){
-        const person = await db.findFirst({
-            where: {id},
-            include: {role: true}
-        });
-        return new Person(remap(person));
+
+    async LoadOne({id, name, email}, op = null) {
+        let person;
+        if (op === "AND" || !op) {
+            person = (await db.findFirst({
+                where: {
+                    AND: [{id}, {name}, {email}]
+                }
+            }));
+        }else{
+            person = (await db.findFirst({
+                where: {
+                    OR: [{id}, {name}, {email}]
+                }
+            }));
+        }
+        return person ? new Person(person) : null;
     }
-    async LoadByName(name) {
-        const person = await db.findFirst({
-            where: {name},
-            include: {role: true}
-        });
-        return person ? new Person(remap(person)) : null;
-    }
-    async LoadByEmail(email) {
-        const person = await db.findFirst({
-            where: {email},
-            include: {role: true}
-        });
-        return person ? new Person(remap(person)) : null;
+    async Load({id, name, email}, op = null) {
+        if (op === "AND" || !op) {
+            return (await db.findMany({
+                where: {
+                    AND: [{id}, {name}, {email}]
+                }
+            })).map(person => new Person(person));
+        }
+        return (await db.findMany({
+            where: {
+                OR: [{id}, {name}, {email}]
+            }
+        })).map(person => new Person(person));
     }
 }
 

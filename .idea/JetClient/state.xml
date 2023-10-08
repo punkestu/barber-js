@@ -8,7 +8,7 @@
             <requestState>
               <option name="body">
                 <bodyState>
-                  <option name="raw" value="{&#10;  &quot;name&quot;: &quot;test&quot;,&#10;  &quot;email&quot;: &quot;test123@mail.com&quot;,&#10;  &quot;password&quot;: &quot;test1234&quot;&#10;}" />
+                  <option name="raw" value="{&#10;  &quot;name&quot;: &quot;bima123&quot;,&#10;  &quot;email&quot;: &quot;bima123@mail.com&quot;,&#10;  &quot;password&quot;: &quot;test1234&quot;&#10;}" />
                   <option name="type" value="JSON" />
                 </bodyState>
               </option>
@@ -59,7 +59,7 @@
               <requestState>
                 <option name="body">
                   <bodyState>
-                    <option name="raw" value="{&#10;  &quot;start&quot;: &quot;12:00&quot;,&#10;  &quot;end&quot;: &quot;13:00&quot;,&#10;  &quot;day&quot;: &quot;MON&quot;&#10;}" />
+                    <option name="raw" value="{&#10;  &quot;start&quot;: &quot;20:00&quot;,&#10;  &quot;end&quot;: &quot;20:30&quot;,&#10;  &quot;day&quot;: &quot;MON&quot;&#10;}" />
                     <option name="type" value="JSON" />
                   </bodyState>
                 </option>
@@ -79,7 +79,7 @@
               <requestState>
                 <option name="body">
                   <bodyState>
-                    <option name="raw" value="{&#10;  &quot;id&quot;: 16,&#10;  &quot;start&quot;: &quot;13:00&quot;,&#10;  &quot;end&quot;: &quot;15:00&quot;,&#10;  &quot;day&quot;: &quot;MON&quot;&#10;}" />
+                    <option name="raw" value="{&#10;  &quot;id&quot;: 28,&#10;  &quot;start&quot;: &quot;20:00&quot;,&#10;  &quot;end&quot;: &quot;20:10&quot;,&#10;  &quot;day&quot;: &quot;MON&quot;&#10;}" />
                     <option name="type" value="JSON" />
                   </bodyState>
                 </option>

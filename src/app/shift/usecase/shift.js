@@ -1,16 +1,6 @@
 const Shift = require("../../../domain/shift");
-const Validator = require("validatorjs");
+const Validator = require("../../../lib/validator");
 const {ErrNotFound} = require("../../../domain/error");
-
-Validator.register("not_used", (_, requirement) => {
-    return !requirement;
-}, ":attribute is used", null);
-Validator.register("exists", (_, requirement) => {
-    return requirement;
-}, ":attribute not exists", null);
-Validator.register("after_time", (value, requirement) => {
-    return (value - requirement) > 0;
-}, ":attribute must after requirement", null);
 
 class Service {
     #repo;
@@ -23,7 +13,7 @@ class Service {
         const validation = new Validator(
             {start, end},
             {
-                start: [{"not_used": (await this.#repo.IsConflict({start, end, day}))[0]}],
+                start: [{"not_used": await this.#repo.IsConflict({start, end, day})}],
                 end: [{"after_time": start}]
             },
             {"not_used": "this schedule is used", "after_time": ":attribute must after start"}
@@ -42,11 +32,12 @@ class Service {
     }
 
     async UpdateShift(id, start, end, day) {
+        const shift = await this.#repo.LoadOne({id});
         const validation = new Validator(
             {id, start, end},
             {
-                id: [{"exists": (await this.#repo.Load({id}))[0]}],
-                start: [{"not_used": (await this.#repo.IsConflict({start, end, day}))[0]}],
+                id: [{"exists": shift}],
+                start: [{"not_used": await this.#repo.IsConflict({id, start, end, day})}],
                 end: [{"after_time": start}]
             },
             {"not_used": "this schedule is used", "after_time": ":attribute must after start"}

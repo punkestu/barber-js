@@ -1,9 +1,5 @@
 const BarberM = require("../../../domain/barber");
-const Validator = require("validatorjs");
-
-Validator.register("exists", (_, requirement) => {
-    return requirement;
-}, ":attribute not exists", null);
+const Validator = require("../../../lib/validator");
 
 class Barber {
     #repo;
@@ -16,25 +12,25 @@ class Barber {
         this.#shiftRepo = shiftRepo;
     }
 
-    async RegisterShift(barberId, shiftId) {
+    async RegisterShift(barber_id, shift_id) {
         const validation = new Validator(
-            {barberId, shiftId},
+            {barber_id, shift_id},
             {
-                barberId: [{"exists": (await this.#personRepo.LoadByID(barberId))}],
-                shiftId: [{"exists": (await this.#shiftRepo.Load({id: barberId}))[0]}]
+                barber_id: [{"exists": await this.#personRepo.LoadOne({id: barber_id})}],
+                shift_id: [{"exists": await this.#shiftRepo.LoadOne({id: shift_id})}]
             }
         );
         if (!validation.check()) {
             throw validation.errors;
         }
-        return this.#repo.Save(new BarberM({barber_id: barberId, shift_id: shiftId, active: true}));
+        return this.#repo.Save(new BarberM({barber_id: barber_id, shift_id: shift_id, active: true}));
     }
 
     async DropShift(id) {
         const validation = new Validator(
             {id},
             {
-                id: [{"exists": (await this.#repo.Load({id}))[0]}],
+                id: [{"exists": await this.#repo.LoadOne({id})}],
             }
         );
         if (!validation.check()) {
@@ -44,7 +40,7 @@ class Barber {
     }
 
     async ToggleShift(id) {
-        const barber = (await this.#repo.Load({id}))[0];
+        const barber = (await this.#repo.LoadOne({id}));
         const validation = new Validator(
             {id},
             {
