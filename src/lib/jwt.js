@@ -7,7 +7,7 @@ module.exports = {
         payload = Encrypt(JSON.stringify(payload));
         return jwt.sign({payload}, secret);
     },
-    Verify: (token) => {
+    Verify: async (token) => {
         let claim;
         try {
             const {payload} = jwt.verify(token, secret);
