@@ -71,7 +71,13 @@ class Repo {
                 email: true,
                 Barber: {
                     where: {shift: {day}},
-                    select: {active: true, shift: true}
+                    select: {
+                        id: true, active: true, shift: true, Order: {
+                            where: {
+                                date: {gte: new Date()}
+                            }
+                        }
+                    }
                 }
             }
         }).then(barbers => {

@@ -4,15 +4,15 @@ module.exports = function (personRepo) {
     return {
         isAuth: async (req, res, next) => {
             try {
-                if(!req.headers.authorization){
+                if (!req.headers.authorization) {
                     throw null;
                 }
                 const userClaim = await Verify(req.headers.authorization.slice(7));
-                if(!userClaim.id) {
+                if (!userClaim.id) {
                     throw null;
                 }
-                req.user = await personRepo.LoadOne({id:userClaim.id});
-                if(!req.user){
+                req.user = await personRepo.LoadOne({id: userClaim.id});
+                if (!req.user) {
                     throw null;
                 }
                 next();
@@ -21,7 +21,13 @@ module.exports = function (personRepo) {
             }
         },
         isAdmin: (req, res, next) => {
-            if(req.user && req.user.role === "ADMIN") {
+            if (req.user && req.user.role === "ADMIN") {
+                return next();
+            }
+            return res.sendStatus(403);
+        },
+        isClient: (req, res, next) => {
+            if (req.user && req.user.role === "CLIENT") {
                 return next();
             }
             return res.sendStatus(403);

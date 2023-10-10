@@ -15,4 +15,7 @@ app.use("/shift", shift.http);
 const barber = require("../src/app/barber")(auth.repo, shift.repo, authMid);
 app.use("/barber", barber.http);
 
+const order = require("../src/app/order")(authMid);
+app.use("/order", order.http);
+
 app.listen(3000, ()=>console.log("listen at :3000"));
