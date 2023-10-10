@@ -1,5 +1,6 @@
-const {barber: db} = require("../../../lib/prisma");
+const {barber: db, person: db2} = require("../../../lib/prisma");
 const Barber = require("../../../domain/barber");
+const Schedule = require("../../../domain/schedule");
 
 class Repo {
     async Save(barber) {
@@ -58,6 +59,28 @@ class Repo {
                 OR: [{id}, {shift_id}, {barber_id}, {active}]
             }
         })).map(barber => new Barber(barber));
+    }
+
+    async LoadByBarber({day}) {
+        return db2.findMany({
+            where: {
+                role: "BARBER"
+            },
+            select: {
+                name: true,
+                email: true,
+                Barber: {
+                    where: {shift: {day}},
+                    select: {active: true, shift: true}
+                }
+            }
+        }).then(barbers => {
+            return barbers.map(barber =>
+                new Schedule({
+                    barber: {...barber, Barber: undefined},
+                    schedules: barber.Barber
+                }));
+        });
     }
 
     async Delete(id) {
