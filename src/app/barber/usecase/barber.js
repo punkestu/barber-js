@@ -53,6 +53,10 @@ class Barber {
         barber.active = !barber.active;
         return this.#repo.Save(barber);
     }
+
+    async GetSchedule({day}) {
+        return this.#repo.LoadByBarber({day});
+    }
 }
 
 module.exports = Barber;
