@@ -62,6 +62,8 @@ class Repo {
     }
 
     async LoadByBarber({day}) {
+        const today = new Date();
+        today.setHours(0,0,0,0);
         return db2.findMany({
             where: {
                 role: "BARBER"
@@ -71,7 +73,13 @@ class Repo {
                 email: true,
                 Barber: {
                     where: {shift: {day}},
-                    select: {active: true, shift: true}
+                    select: {
+                        id: true, active: true, shift: true, Order: {
+                            where: {
+                                date: {gte: today}
+                            }
+                        }
+                    }
                 }
             }
         }).then(barbers => {
