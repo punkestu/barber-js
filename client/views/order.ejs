@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<%- include("./components/head.ejs")%>
+<body class="bg-[#001058]">
+<%- include("./components/header.ejs")%>
+<main class="mx-36 mb-8">
+    <%
+    const DAYS3 = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+    %>
+    <section class="flex flex-col items-center">
+        <h1 class="font-medium text-[#001058] bg-[#FFBF1B] rounded-2xl px-6 py-3 text-3xl">Lihat Jadwal</h1>
+        <%- include("./components/day_cursor.ejs", {today:today, day:day})%>
+    </section>
+    <form method="post" action="/app/order" class="flex flex-col items-center">
+        <%
+        const tanggal = new Date();
+        tanggal.setDate(tanggal.getDate() - tanggal.getDay() + DAYS3.findIndex(_day=>day === _day));
+        %>
+        <input type="hidden" name="date" value="<%= tanggal.toISOString()%>">
+        <%- include("./components/schedule_list.ejs", {barbers:barbers}) %>
+        <button type="submit" class="bg-[#FFBF1B] px-4 py-2 rounded-xl font-black text-3xl" id="confirm_jadwal">Konfirmasi Jadwal</button>
+    </form>
+</main>
+<%- include("./components/footer.ejs")%>
+<script src="/public/script.js"></script>
+<script src="https://unpkg.com/htmx.org@1.9.6" integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni" crossorigin="anonymous"></script>
+</body>
+</html>

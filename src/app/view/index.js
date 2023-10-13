@@ -1,7 +1,7 @@
-module.exports = function(barberRepo) {
+module.exports = function(barberRepo, authService, orderService, authMid) {
     const scheduleService = new (require("./service/schedule"))(barberRepo);
-    const handler = new (require("./handler/http/handler"))(scheduleService);
+    const handler = new (require("./handler/http/handler"))(scheduleService, authService, orderService);
     return {
-        http: require("./handler/http/route")(handler)
+        http: require("./handler/http/route")(handler, authMid)
     }
 }

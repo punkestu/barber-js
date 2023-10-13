@@ -1,0 +1,13 @@
+<header class="mx-10 xl:mx-36 my-4 px-6 py-2 bg-[#FFBF1B] rounded-2xl flex justify-center md:justify-between items-center">
+    <img src="/public/logo.png" class="w-32" alt="">
+    <div class="hidden md:flex gap-8 text-[#001058]">
+        <a <%if(active==="home"){%>class="font-black"<%}%> href="/">Beranda</a>
+        <a <%if(active==="about"){%>class="font-black"<%}%> href="#">Tentang</a>
+        <a <%if(active==="ticket"){%>class="font-black"<%}%> href="/ticket">Tiket</a>
+    </div>
+</header>
+<nav class="fixed md:hidden bg-[#14295F] text-[#FFBF1B] bottom-0 w-full p-4 pt-6 rounded-t-xl flex justify-evenly">
+    <a <%if(active==="home"){%>class="font-black"<%}%> href="/">Beranda</a>
+    <a <%if(active==="about"){%>class="font-black"<%}%> href="#">Tentang</a>
+    <a <%if(active==="ticket"){%>class="font-black"<%}%> href="/ticket">Tiket</a>
+</nav>

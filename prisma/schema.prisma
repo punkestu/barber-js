@@ -57,10 +57,17 @@ model Barber {
 }
 
 model Order {
-  id        Int      @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   client_id Int
-  client    Person   @relation(fields: [client_id], references: [id])
+  client    Person     @relation(fields: [client_id], references: [id])
   barber_id Int
-  barber    Barber   @relation(fields: [barber_id], references: [id])
-  date      DateTime @db.Date
+  barber    Barber     @relation(fields: [barber_id], references: [id])
+  date      DateTime
+  state     OrderState @default(ORDERED)
+}
+
+enum OrderState {
+  ORDERED
+  ACCEPTED
+  EXPIRED
 }

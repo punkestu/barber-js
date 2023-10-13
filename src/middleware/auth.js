@@ -4,10 +4,16 @@ module.exports = function (personRepo) {
     return {
         isAuth: async (req, res, next) => {
             try {
-                if (!req.headers.authorization) {
+                const token = req.headers.authorization || req.cookies.TOKEN;
+                if (!token) {
                     throw null;
                 }
-                const userClaim = await Verify(req.headers.authorization.slice(7));
+                let userClaim;
+                if(!req.cookies.TOKEN){
+                    userClaim = await Verify(token.slice(7));
+                }else{
+                    userClaim = await Verify(token);
+                }
                 if (!userClaim.id) {
                     throw null;
                 }

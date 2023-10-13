@@ -66,13 +66,13 @@ class Repo {
         today.setHours(0,0,0,0);
         return db2.findMany({
             where: {
-                role: "BARBER"
+                role: "BARBER",
             },
             select: {
                 name: true,
                 email: true,
                 Barber: {
-                    where: {shift: {day}},
+                    where: {shift: {day:day}},
                     select: {
                         id: true, active: true, shift: true, Order: {
                             where: {

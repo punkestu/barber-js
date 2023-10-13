@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<%- include("./components/head.ejs")%>
+<body class="bg-[#001058]">
+<%- include("./components/header.ejs")%>
+<main class="flex flex-col items-center mx-4 md:mx-24 lg:mx-36">
+    <h1 class="font-black text-[#001058] bg-[#FFBF1B] rounded-2xl px-6 py-3 text-3xl">
+        TIKET BOOKING
+    </h1>
+    <section class="flex flex-col items-center w-full bg-white my-4 p-8 rounded-2xl">
+        <h2 class="text-[#FFBF1B] font-bold text-xl mb-4">ORDER BOOK</h2>
+        <img src="/public/logo.png" class="w-64">
+        <div class="w-full border-2 border-slate-500 border-dashed my-4"></div>
+        <div class="w-full md:px-16 text-slate-700 flex flex-col gap-2">
+            <p class="flex justify-between">Nomor Pemesanan<span class="font-semibold text-right"><%= ticket.id%></span></p>
+            <p class="flex justify-between">Nama Lengkap<span class="font-semibold text-right"><%= ticket.client.name%></span></p>
+            <p class="flex justify-between">Alamat<span class="font-semibold text-right">Jl. Jambu 1 no. 67, Sumbersari, Jember</span></p>
+            <p class="flex justify-between">Jenis Kelamin<span class="font-semibold text-right">Laki-laki</span></p>
+            <p class="flex justify-between">Usia<span class="font-semibold text-right">22 Tahun</span></p>
+            <p class="flex justify-between">Jadwal<span class="font-semibold text-right"><%= ticket.date.toLocaleDateString('id-ID', {day: "2-digit", month: 'long', year: "numeric"})%> | <%= ticket.barber.shift.start.toLocaleTimeString('id-ID', {hour12: false}).slice(0,5)%></span></p>
+            <p class="flex justify-between">Kapster<span class="font-semibold text-right"><%= ticket.barber.barber.name%></span></p>
+        </div>
+        <div class="w-full border-2 border-slate-500 border-dashed my-4"></div>
+        <div class="text-[#FF1D1D] flex flex-col items-center">
+            <p>Waktu pangkas</p>
+            <h1 class="font-black text-5xl text-[#AC2A2A]"><%= ticket.barber.shift.start.toLocaleTimeString('id-ID', {hour12: false}).slice(0,5)%></h1>
+            <p class="font-semibold"><%= ticket.date.toLocaleDateString('id-ID', {day: "2-digit", weekday:"long", month: 'long', year: "numeric"})%></p>
+        </div>
+    </section>
+    <section class="w-full bg-[#FFDFDF] rounded-2xl border-8 border-[#AC2A2A] flex flex-col items-center mb-10 px-4 md:px-20 py-8">
+        <h2 class="text-[#AC2A2A] font-bold text-xl mb-2">CATATAN</h2>
+        <p class="text-center px-4 lg:px-28 py-4 bg-white text-[#DC0055] rounded-xl">Demi kenyamanan Pelanggan, diharapkan berada di Tempat <span class="font-bold">10 menit sebelum</span> jam antrian Anda. </p>
+        <div class="flex flex-col gap-2 mt-2">
+            <h3 class="font-medium">Cara chek-in di Pangkas Rambut Al-Mubarok</h3>
+            <ol class="list-decimal ps-4">
+                <li>Datang ke tempat <span class="font-medium">10 menit sebelum</span> jam antrian anda</li>
+                <li>Tunggu jam yang telah di booking.</li>
+                <li>Tunjukkan bukti tiket pemesanan pada Kapster.</li>
+                <li>Pilih model rambut yang diinginkan</li>
+                <li>Pelanggan dilayani sepenuh hati</li>
+                <li>Maksimal Keterlamabatan 10 menit, jika melebihi dianggap tidak hadir</li>
+            </ol>
+        </div>
+        <p class="text-center mt-4 text-[#DC0055]"><span class="font-bold">PENTING</span>: JIKA TIDAK HADIR SETELAH BOOKING, TOTAL 3 KALI, MAKA AKUN ANDA AKAN <span class="font-bold">DIBLOKIR</span></p>
+    </section>
+</main>
+<%- include("./components/footer.ejs")%>
+<script src="/public/script.js"></script>
+<script src="https://unpkg.com/htmx.org@1.9.6" integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Barber | Admin</title>
+</head>
+<body>
+<div>
+    <% orders.forEach(order=>{ %>
+        <div>
+            <p><%= order.id%></p>
+            <h2><%= order.client.name %></h2>
+            <h3><%= order.date.toLocaleDateString("id-ID", {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric",
+                    weekday: "long"
+                }) %>|<%= order.date.toLocaleTimeString("id-ID", {
+                    hour12: false
+                }).slice(0, 5) %></h3>
+            <h3 id="order-state-<%= order.id%>"><%= order.state%></h3>
+            <button hx-get="/admin/acceptance/<%= order.id%>" hx-target="#order-state-<%= order.id%>">Accept</button>
+            <button hx-get="/admin/rejection/<%= order.id%>" hx-target="#order-state-<%= order.id%>">Cancel</button>
+        </div>
+    <% }); %>
+</div>
+<script src="https://unpkg.com/htmx.org@1.9.6" integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni" crossorigin="anonymous"></script>
+</body>
+</html>
