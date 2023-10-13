@@ -3,6 +3,5 @@ module.exports = function (handler, authMid) {
     router.post("/", authMid.isAuth, authMid.isAdmin, handler.RegisterShift);
     router.delete("/", authMid.isAuth, authMid.isAdmin, handler.DropShift);
     router.put("/", authMid.isAuth, authMid.isAdmin, handler.ToggleShift);
-    router.get("/", handler.GetAll);
     return router;
 }
