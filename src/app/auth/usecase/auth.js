@@ -24,6 +24,7 @@ class Auth {
     }
     async Auth(email, password) {
         const person = await this.#repo.LoadOne({email});
+        console.log(person, email);
         const validation = new Validator(
             {email},
             {

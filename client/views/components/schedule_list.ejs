@@ -1,0 +1,25 @@
+<section id="schedules" class="flex flex-col gap-3">
+    <%
+    const DAYS3 = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+    const tanggal = new Date();
+    tanggal.setDate(tanggal.getDate() - tanggal.getDay() + DAYS3.findIndex(_day=>day === _day));
+    %>
+    <input type="hidden" name="date" value="<%= tanggal.toISOString()%>">
+    <div class="w-full flex flex-col lg:flex-row gap-8 mt-10 h-96 overflow-y-scroll">
+        <% barbers.forEach(({barber, schedules}, i)=>{ %>
+            <aside class="bg-white h-auto p-4 rounded-xl border-4 border-[#FFBF1B]">
+                <header class="h-1/5">
+                    <h2 class="text-[#FFBF1B] font-black text-2xl">Kapster <%= i + 1%></h2>
+                    <h3 class="font-bold text-lg"><%= barber.name %></h3>
+                </header>
+                <main class="w-full h-4/5 overflow-y-scroll flex justify-start items-start flex-wrap">
+                    <% schedules.forEach((schedule)=>{ %>
+                        <%- include("./schedule.ejs",{schedule: schedule}) %>
+                    <% }) %>
+                </main>
+            </aside>
+        <% }) %>
+    </div>
+    <p class="text-white flex md:flex-row flex-col">Keterangan : <span><span class="px-5 rounded-full bg-[#FF1D1D] mx-2"></span> Tidak tersedia</span> <span><span
+                class="px-5 rounded-full bg-white mx-2"></span> Tersedia</span></p>
+</section>

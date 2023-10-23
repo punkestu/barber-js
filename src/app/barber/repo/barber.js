@@ -34,12 +34,18 @@ class Repo {
             barber = await db.findFirst({
                 where: {
                     AND: [{id}, {shift_id}, {barber_id}, {active}]
+                },
+                include: {
+                    shift: true
                 }
             });
         } else {
             barber = await db.findFirst({
                 where: {
                     OR: [{id}, {shift_id}, {barber_id}, {active}]
+                },
+                include: {
+                    shift: true
                 }
             });
         }
@@ -66,13 +72,13 @@ class Repo {
         today.setHours(0,0,0,0);
         return db2.findMany({
             where: {
-                role: "BARBER"
+                role: "BARBER",
             },
             select: {
                 name: true,
                 email: true,
                 Barber: {
-                    where: {shift: {day}},
+                    where: {shift: {day:day}},
                     select: {
                         id: true, active: true, shift: true, Order: {
                             where: {

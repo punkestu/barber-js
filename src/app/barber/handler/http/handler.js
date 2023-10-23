@@ -74,16 +74,6 @@ class Handler {
             return res.sendStatus(500);
         }
     }
-
-    GetAll = async (req, res) => {
-        const {day} = req.query;
-        try {
-            const schedules = await this.#service.GetSchedule({day});
-            res.json(schedules);
-        } catch (err) {
-            res.json(err);
-        }
-    }
 }
 
 module.exports = Handler;
