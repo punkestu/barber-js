@@ -88,7 +88,6 @@ class Handler {
     }
 
     AuthRegister = async (req, res) => {
-        console.log(req.body);
         const {full_name, email, password} = req.body;
         try {
             const token = await this.#authService.Register(full_name, email, password).then(person => Sign(person));
@@ -97,6 +96,10 @@ class Handler {
             console.log(err);
             res.redirect("back");
         }
+    }
+
+    Profile = async (req, res) => {
+        res.render("profile", {user: req.user, active: "profile"});
     }
 
     AdminOrder = async (req, res) => {
@@ -119,7 +122,6 @@ class Handler {
             return res.sendStatus(400);
         }
     }
-
 
     OrderReject = async (req, res) => {
         const {id} = req.params;

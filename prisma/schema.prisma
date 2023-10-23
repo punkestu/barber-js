@@ -16,6 +16,7 @@ model Person {
   email    String   @unique @db.VarChar(64)
   password String
   role     Role
+  banned   Boolean  @default(false)
   Barber   Barber[]
   Order    Order[]
 }
