@@ -1,18 +1,8 @@
-const {order: db, barber: db2} = require("../../../lib/prisma");
+const {order: db} = require("../../../lib/prisma");
 const OrderM = require("../../../domain/order");
 
 class Order {
     async Save(order) {
-        // const barber = await db2.findFirst({
-        //     where: {
-        //         id: order.barber_id
-        //     },
-        //     include: {
-        //         shift: true
-        //     }
-        // });
-        // order.date = new Date(order.date);
-        // order.date.setHours(barber.shift.start.getHours(), barber.shift.start.getMinutes());
         if (!order.id) {
             return db.create({
                 data: {
