@@ -50,7 +50,7 @@ class Handler {
             if (ticket) {
                 throw new Error("tidak bisa booking 2 kali");
             }
-            await this.#orderService.CreateOrder(date, client_id, parseInt(barber_id));
+            await this.#orderService.CreateOrder(new Date(date), client_id, parseInt(barber_id));
             res.redirect("/ticket");
         } catch (err) {
             console.log(err);
@@ -69,7 +69,10 @@ class Handler {
     }
 
     Login = async (req, res) => {
-        res.render("login");
+        res.render("login", {active: null});
+    }
+    Register = async (req, res) => {
+        res.render("register", {active: null});
     }
 
     AuthLogin = async (req, res) => {
@@ -77,6 +80,18 @@ class Handler {
         const {email, password} = req.body;
         try {
             const token = await this.#authService.Auth(email, password).then(person => Sign(person));
+            res.cookie("TOKEN", token).redirect("/");
+        } catch (err) {
+            console.log(err);
+            res.redirect("back");
+        }
+    }
+
+    AuthRegister = async (req, res) => {
+        console.log(req.body);
+        const {full_name, email, password} = req.body;
+        try {
+            const token = await this.#authService.Register(full_name, email, password).then(person => Sign(person));
             res.cookie("TOKEN", token).redirect("/");
         } catch (err) {
             console.log(err);
@@ -121,7 +136,7 @@ class Handler {
         try {
             const day = req.query["schedule-day"] ? DAYS[parseInt(req.query["schedule-day"])] : DAYS[new Date().getDay()];
             const barbers = await this.#service.GetSchedule(day);
-            res.render("components/schedule_list", {barbers});
+            res.render("components/schedule_list", {barbers, day});
         } catch (err) {
             console.log(err);
             res.status(500).json(err);

@@ -23,7 +23,7 @@ app.use("/shift", shift.http);
 const barber = require("../src/app/barber")(auth.repo, shift.repo, authMid);
 app.use("/barber", barber.http);
 
-const order = require("../src/app/order")(authMid);
+const order = require("../src/app/order")(barber.repo, authMid);
 app.use("/order", order.http);
 
 const view = require("../src/app/view")(barber.repo, auth.service, order.service, authMid);

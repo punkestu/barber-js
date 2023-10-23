@@ -34,12 +34,18 @@ class Repo {
             barber = await db.findFirst({
                 where: {
                     AND: [{id}, {shift_id}, {barber_id}, {active}]
+                },
+                include: {
+                    shift: true
                 }
             });
         } else {
             barber = await db.findFirst({
                 where: {
                     OR: [{id}, {shift_id}, {barber_id}, {active}]
+                },
+                include: {
+                    shift: true
                 }
             });
         }

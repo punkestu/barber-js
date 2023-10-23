@@ -2,12 +2,20 @@ const OrderM = require("../../../domain/order");
 
 class Order {
     #repo;
+    #barberRepo;
 
-    constructor(repo) {
+    constructor(repo, barberRepo) {
         this.#repo = repo;
+        this.#barberRepo = barberRepo;
     }
 
-    CreateOrder(date, client_id, barber_id) {
+    async CreateOrder(date, client_id, barber_id) {
+        const schedule = await this.#barberRepo.LoadOne({id: barber_id});
+        date.setHours(schedule.shift.start.getHours(), schedule.shift.start.getMinutes());
+        console.log(date);
+        if (date < new Date()) {
+            throw new Error("invalid schedule");
+        }
         return this.#repo.Save(new OrderM({client_id, barber_id, date}));
     }
 
