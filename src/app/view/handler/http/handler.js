@@ -102,6 +102,10 @@ class Handler {
         res.render("profile", {user: req.user, active: "profile"});
     }
 
+    BanScreen = (req, res) => {
+        res.render("ban-screen", {active: null});
+    }
+
     AdminOrder = async (req, res) => {
         try {
             const orders = await this.#orderService.GetForAdmin();
