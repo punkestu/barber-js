@@ -11,18 +11,20 @@ datasource db {
 }
 
 model Person {
-  id       Int    @id @default(autoincrement())
-  name     String @unique @db.VarChar(50)
-  email    String @unique @db.VarChar(64)
+  id       Int      @id @default(autoincrement())
+  name     String   @unique @db.VarChar(50)
+  email    String   @unique @db.VarChar(64)
   password String
-  role_id  Int
-  role     Role   @relation(fields: [role_id], references: [id])
+  role     Role
+  banned   Boolean  @default(false)
+  Barber   Barber[]
+  Order    Order[]
 }
 
-model Role {
-  id     Int      @id @default(autoincrement())
-  role   String   @unique @db.VarChar(10)
-  Person Person[]
+enum Role {
+  CLIENT
+  BARBER
+  ADMIN
 }
 
 enum Day {
@@ -36,10 +38,37 @@ enum Day {
 }
 
 model Shift {
-  id    Int      @id @default(autoincrement())
-  start DateTime @db.Time()
-  end   DateTime @db.Time()
-  day   Day
+  id     Int      @id @default(autoincrement())
+  start  DateTime @db.Time()
+  end    DateTime @db.Time()
+  day    Day
+  Barber Barber[]
 
   @@unique([day, start])
+}
+
+model Barber {
+  id        Int     @id @default(autoincrement())
+  barber_id Int
+  barber    Person  @relation(fields: [barber_id], references: [id])
+  shift_id  Int
+  shift     Shift   @relation(fields: [shift_id], references: [id])
+  active    Boolean @default(true)
+  Order     Order[]
+}
+
+model Order {
+  id        Int        @id @default(autoincrement())
+  client_id Int
+  client    Person     @relation(fields: [client_id], references: [id])
+  barber_id Int
+  barber    Barber     @relation(fields: [barber_id], references: [id])
+  date      DateTime
+  state     OrderState @default(ORDERED)
+}
+
+enum OrderState {
+  ORDERED
+  ACCEPTED
+  EXPIRED
 }

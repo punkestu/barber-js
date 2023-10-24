@@ -8,7 +8,7 @@
             <requestState>
               <option name="body">
                 <bodyState>
-                  <option name="raw" value="{&#10;  &quot;name&quot;: &quot;test&quot;,&#10;  &quot;email&quot;: &quot;test123@mail.com&quot;,&#10;  &quot;password&quot;: &quot;test1234&quot;&#10;}" />
+                  <option name="raw" value="{&#10;  &quot;name&quot;: &quot;bima123&quot;,&#10;  &quot;email&quot;: &quot;bima123@mail.com&quot;,&#10;  &quot;password&quot;: &quot;test1234&quot;&#10;}" />
                   <option name="type" value="JSON" />
                 </bodyState>
               </option>
@@ -28,7 +28,7 @@
             <requestState>
               <option name="body">
                 <bodyState>
-                  <option name="raw" value="{&#10;  &quot;email&quot;: &quot;test12@mail.com&quot;,&#10;  &quot;password&quot;: &quot;test12345&quot;&#10;}" />
+                  <option name="raw" value="{&#10;  &quot;email&quot;: &quot;bima123@mail.com&quot;,&#10;  &quot;password&quot;: &quot;test1234&quot;&#10;}" />
                   <option name="type" value="JSON" />
                 </bodyState>
               </option>
@@ -59,7 +59,7 @@
               <requestState>
                 <option name="body">
                   <bodyState>
-                    <option name="raw" value="{&#10;  &quot;start&quot;: &quot;12:00&quot;,&#10;  &quot;end&quot;: &quot;12:00&quot;,&#10;  &quot;day&quot;: &quot;MON&quot;&#10;}" />
+                    <option name="raw" value="{&#10;  &quot;start&quot;: &quot;20:00&quot;,&#10;  &quot;end&quot;: &quot;20:30&quot;,&#10;  &quot;day&quot;: &quot;MON&quot;&#10;}" />
                     <option name="type" value="JSON" />
                   </bodyState>
                 </option>
@@ -79,7 +79,7 @@
               <requestState>
                 <option name="body">
                   <bodyState>
-                    <option name="raw" value="{&#10;  &quot;id&quot;: 16,&#10;  &quot;start&quot;: &quot;15:00&quot;,&#10;  &quot;end&quot;: &quot;18:00&quot;,&#10;  &quot;day&quot;: &quot;MON&quot;&#10;}" />
+                    <option name="raw" value="{&#10;  &quot;id&quot;: 28,&#10;  &quot;start&quot;: &quot;20:00&quot;,&#10;  &quot;end&quot;: &quot;20:10&quot;,&#10;  &quot;day&quot;: &quot;MON&quot;&#10;}" />
                     <option name="type" value="JSON" />
                   </bodyState>
                 </option>
@@ -99,7 +99,7 @@
               <requestState>
                 <option name="body">
                   <bodyState>
-                    <option name="raw" value="{&#10;  &quot;id&quot;: 2&#10;}" />
+                    <option name="raw" value="{&#10;  &quot;id&quot;: 4&#10;}" />
                     <option name="type" value="JSON" />
                   </bodyState>
                 </option>
@@ -119,6 +119,80 @@
             </list>
           </option>
           <option name="sortWeight" value="1000000" />
+          <option name="syncProperties">
+            <synchronizationPropertiesState>
+              <option name="folderPath" value="$PROJECT_DIR$/.jetclient" />
+            </synchronizationPropertiesState>
+          </option>
+        </folderState>
+        <folderState>
+          <option name="id" value="01e61661-1342-4eff-8335-01976727daea" />
+          <option name="name" value="barber" />
+          <option name="requests">
+            <list>
+              <requestState>
+                <option name="body">
+                  <bodyState>
+                    <option name="raw" value="{&#10;  &quot;barberId&quot;: 11,&#10;  &quot;shiftId&quot;: 16&#10;}" />
+                    <option name="type" value="JSON" />
+                  </bodyState>
+                </option>
+                <option name="headers">
+                  <list>
+                    <headerState>
+                      <option name="key" value="Content-Type" />
+                      <option name="value" value="application/json" />
+                    </headerState>
+                  </list>
+                </option>
+                <option name="id" value="4e877fce-9d65-4128-9418-306ad856eaad" />
+                <option name="method" value="POST" />
+                <option name="name" value="register" />
+                <option name="url" value="http://localhost:3000/barber" />
+              </requestState>
+              <requestState>
+                <option name="body">
+                  <bodyState>
+                    <option name="raw" value="{&#10;  &quot;id&quot;: 1&#10;}" />
+                    <option name="type" value="JSON" />
+                  </bodyState>
+                </option>
+                <option name="headers">
+                  <list>
+                    <headerState>
+                      <option name="key" value="Content-Type" />
+                      <option name="value" value="application/json" />
+                    </headerState>
+                  </list>
+                </option>
+                <option name="id" value="46028365-36b9-45b0-ae5f-28755aee49a3" />
+                <option name="method" value="PUT" />
+                <option name="name" value="toggle" />
+                <option name="url" value="http://localhost:3000/barber" />
+              </requestState>
+              <requestState>
+                <option name="body">
+                  <bodyState>
+                    <option name="raw" value="{&#10;  &quot;id&quot;: 1&#10;}" />
+                    <option name="type" value="JSON" />
+                  </bodyState>
+                </option>
+                <option name="headers">
+                  <list>
+                    <headerState>
+                      <option name="key" value="Content-Type" />
+                      <option name="value" value="application/json" />
+                    </headerState>
+                  </list>
+                </option>
+                <option name="id" value="200727d5-8582-42f3-8cd1-e325d8886898" />
+                <option name="method" value="DELETE" />
+                <option name="name" value="drop" />
+                <option name="url" value="http://localhost:3000/barber" />
+              </requestState>
+            </list>
+          </option>
+          <option name="sortWeight" value="2000000" />
           <option name="syncProperties">
             <synchronizationPropertiesState>
               <option name="folderPath" value="$PROJECT_DIR$/.jetclient" />

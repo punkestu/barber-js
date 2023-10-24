@@ -1,4 +1,4 @@
-const Validator = require("validatorjs");
+const Validator = require("../../../../lib/validator");
 const Errors = require("validatorjs/src/errors");
 const {ErrNotFound} = require("../../../../domain/error");
 
@@ -29,12 +29,12 @@ class Handler {
             if(!validation.check()){
                 throw validation.errors;
             }
-            await this.#service.CreateShift(
+            const shift = await this.#service.CreateShift(
                 toTime(start),
                 toTime(end),
                 day
             );
-            res.status(201).json({status: "created"});
+            res.status(201).json(shift);
         } catch (err) {
             if(err instanceof Errors){
                 return res.status(400).json(err);
@@ -58,13 +58,13 @@ class Handler {
             if(!validation.check()){
                 throw validation.errors;
             }
-            await this.#service.UpdateShift(
+            const shift = await this.#service.UpdateShift(
                 id,
                 toTime(start),
                 toTime(end),
                 day
             );
-            res.json({status: "updated"});
+            res.json(shift);
         } catch (err) {
             if(err instanceof Errors){
                 return res.status(400).json(err);
@@ -76,8 +76,8 @@ class Handler {
     DeleteShift = async (req, res) => {
         const {id} = req.body;
         try {
-            await this.#service.DeleteShift(id);
-            res.json({status: "deleted"});
+            const shift = await this.#service.DeleteShift(id);
+            res.json(shift);
         } catch (err) {
             if(err instanceof ErrNotFound){
                 return res.status(404).json({

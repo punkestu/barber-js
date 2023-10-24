@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<%- include("./components/head.ejs") %>
+<body class="bg-[#001058]">
+<%- include("./components/header.ejs") %>
+<main class="mx-14 lg:mx-36 mb-4">
+    <div class="w-full bg-[#FFDFDF] rounded-2xl border-8 border-[#AC2A2A] flex flex-col items-center gap-4 mb-10 px-4 md:px-20 py-8">
+        <h1 class="font-bold text-xl md:text-2xl text-center">Anda telah terkena BAN!!!</h1>
+        <p>Silahkan hubungi admin</p>
+        <button onclick="Logout()" class="bg-blue-500 text-white px-6 py-2 rounded-xl">Keluar</button>
+    </div>
+</main>
+<%- include("./components/footer.ejs") %>
+<script>
+    function Logout() {
+        ClearCookies();
+        location.reload();
+    }
+</script>
+<script src="/public/script.js"></script>
+<script src="https://unpkg.com/htmx.org@1.9.6"
+        integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni"
+        crossorigin="anonymous"></script>
+</body>
+</html>

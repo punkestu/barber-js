@@ -1,0 +1,37 @@
+<%
+const DAYS = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+const DAYS3 = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+const todayDate = new Date();
+%>
+<div class="mt-5 hidden md:flex justify-center items-end w-full">
+    <%for(let i = today; i < today + 7; i++){ %>
+        <a href="<%= base%>/?day=<%= DAYS3[i % 7] %>"
+        <% if(day === DAYS3[i % 7]){ %>
+           class="w-1/6 py-3 flex flex-col items-center rounded-t-xl
+                   <%= (i - today) % 7 === 0 ? "rounded-es-xl" : ((i - today) % 7 === 6 ? "rounded-ee-xl" : "") %>
+                   text-xl lg:text-2xl font-semibold text-[#001058] bg-[#FFBF1B]"
+        <% }else{ %>
+           class="w-1/6 border-t-8 border-b-8
+                   <% if((i - today) % 7 === 6){ %>
+                   border-r-8 rounded-r-2xl
+                   <% }else if((i - today) % 7 === 0){ %>
+                   border-l-8 rounded-l-2xl
+                   <% } %>
+                   py-1 flex flex-col items-center text-sm lg:text-lg font-semibold text-[#FFBF1B] bg-[#3155FF]"
+                <% } %>
+        >
+            <span class="font-black <%= day === DAYS3[i % 7] ? "text-4xl lg:text-6xl" : "text-2xl lg:text-4xl" %>"><%= todayDate.getDate() %></span>
+            <%= DAYS[i % 7] %>
+        </a>
+        <% todayDate.setDate(todayDate.getDate() + 1) %>
+    <% } %>
+</div>
+<select name="schedule-day" class="bg-[#FFBF1B] font-black w-full p-4 rounded-t-xl mt-8 md:hidden" hx-get="/schedule" hx-trigger="change" hx-target="#schedules" hx-swap="outerHTML" hx-include="[name='schedule-day']">
+    <%const todayDate2 = new Date();%>
+    <%for (let i = 0; i < 7; i++){%>
+        <option class="text-[#FFBF1B] font-bold bg-[#3155FF] rounded-b-xl" value="<%=todayDate2.getDay()%>">
+            <%= todayDate2.getDate() %> | <%= DAYS[todayDate2.getDay()]%>
+        </option>
+    <% todayDate2.setDate(todayDate2.getDate() + 1) %>
+    <%}%>
+</select>

@@ -6,12 +6,14 @@ class Person extends Model{
     email;
     password;
     role;
-    constructor({id,name,email,password,role}) {
+    banned;
+    constructor({id,name,email,password,role,banned}) {
         super(id);
         this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.banned = banned;
     }
     async EncryptPassword(){
         this.password = await Hash(this.password);

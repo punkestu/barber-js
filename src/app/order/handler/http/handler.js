@@ -1,0 +1,19 @@
+class Handler {
+    #service;
+    constructor(service) {
+        this.#service = service;
+    }
+    CreateOrder = async (req,res) => {
+        const client_id = req.user.id;
+        const {date, barber_id} = req.body;
+        console.log(client_id, date, barber_id);
+        try {
+            const order = await this.#service.CreateOrder(date, client_id, parseInt(barber_id));
+            res.status(201).json(order);
+        }catch (err) {
+            res.sendStatus(500);
+        }
+    }
+}
+
+module.exports = Handler;
