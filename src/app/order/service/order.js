@@ -23,6 +23,10 @@ class Order {
         return this.#repo.LoadOneIsValid(client_id);
     }
 
+    GetMyExpiredOrder(client_id) {
+        return this.#repo.Load({client_id, state: "EXPIRED"});
+    }
+
     async UpdateState(id, state) {
         const order = await this.#repo.LoadOne({id});
         if (!order) {

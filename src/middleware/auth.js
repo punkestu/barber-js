@@ -35,7 +35,6 @@ module.exports = function (personRepo) {
             }
         },
         isRole: ({role, view}) => (req, res, next) => {
-            console.log(req.user.role);
             if (req.user && req.user.role === role) {
                 return next();
             }
@@ -44,16 +43,22 @@ module.exports = function (personRepo) {
         isBanned: ({view, negate}) => (req, res, next) => {
             if (negate) {
                 if (req.user && req.user.banned) {
-                    if(req.originalUrl === "/ban-screen") return next();
+                    if (req.originalUrl === "/ban-screen") return next();
                     return view ? res.redirect("/ban-screen") : res.sendStatus(403);
                 }
                 return next();
-            }else{
+            } else {
                 if (req.user && req.user.banned) {
                     return next();
                 }
                 return view ? res.redirect("/") : res.sendStatus(200);
             }
+        },
+        AdminGateway: async (req, res, next) => {
+            if(req.user.role === "ADMIN") {
+                return res.redirect("/admin");
+            }
+            next();
         }
     }
 }

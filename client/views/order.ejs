@@ -9,7 +9,7 @@
         <%- include("./components/day_cursor.ejs", {today:today, day:day})%>
     </section>
     <form method="post" action="/app/order" class="flex flex-col items-center">
-        <%- include("./components/schedule_list.ejs", {barbers:barbers}) %>
+        <%- include("./components/schedule_list.ejs", {barbers:barbers, day: day}) %>
         <button type="submit" class="mt-4 bg-[#FFBF1B] px-4 py-2 rounded-xl font-black text-3xl" id="confirm_jadwal">Konfirmasi Jadwal</button>
     </form>
 </main>

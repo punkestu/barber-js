@@ -1,10 +1,10 @@
 class Schedule {
-    #repo;
-    constructor(repo) {
-        this.#repo = repo;
+    #barberRepo;
+    constructor(barberRepo) {
+        this.#barberRepo = barberRepo;
     }
     async GetSchedule(day) {
-        return this.#repo.LoadByBarber({day});
+        return this.#barberRepo.LoadByBarber({day});
     }
 }
 
