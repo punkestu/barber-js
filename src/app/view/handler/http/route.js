@@ -9,16 +9,17 @@ module.exports = function (handler, authMid) {
     router.get("/ban-screen", authMid.isBanned({view: true, negate: false}), handler.BanScreen);
     router.use(authMid.isBanned({view: true, negate: true}));
 
-    router.get("/", handler.Index);
+    router.get("/", authMid.AdminGateway, handler.Index);
     router.get("/profile", handler.Profile);
-    router.get("/order", handler.Order);
-    router.get("/ticket", handler.Ticket);
-    router.post("/app/order", handler.CreateOrder);
-    router.get("/schedule", handler.GetSchedule);
+    router.get("/order", authMid.AdminGateway, handler.Order);
+    router.get("/ticket", authMid.AdminGateway, handler.Ticket);
+    router.post("/app/order", authMid.AdminGateway, handler.CreateOrder);
+    router.get("/schedule", authMid.AdminGateway, handler.GetSchedule);
 
     router.use(authMid.isRole({view: true, role: "ADMIN"}));
 
     router.get("/admin", handler.AdminOrder);
+    router.get("/admin/orders", handler.GetOrders);
     router.get("/admin/acceptance/:id", handler.OrderAccept);
     router.get("/admin/rejection/:id", handler.OrderReject);
     return router;

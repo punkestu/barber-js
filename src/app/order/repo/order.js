@@ -15,17 +15,17 @@ class Order {
         }).then(order => new OrderM(order));
     }
 
-    Load({id, date, barber_id, client_id}, op = null) {
+    Load({id, date, barber_id, client_id, state}, op = null) {
         if (op === "OR") {
             return db.findMany({
                 where: {
-                    OR: [{id}, {date}, {barber_id}, {client_id}]
+                    OR: [{id}, {date}, {barber_id}, {client_id}, {state}]
                 }
             }).then(orders => orders.map(order => new OrderM(order)));
         }
         return db.findMany({
             where: {
-                AND: [{id}, {date}, {barber_id}, {client_id}]
+                AND: [{id}, {date}, {barber_id}, {client_id}, {state}]
             }
         }).then(orders => orders.map(order => new OrderM(order)));
     }

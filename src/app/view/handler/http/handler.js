@@ -13,10 +13,9 @@ class Handler {
     }
 
     Index = async (req, res) => {
-        const today = new Date().getDay();
-        const day = req.query.day ? req.query.day : DAYS[today];
-        console.log(req.query);
         try {
+            const today = new Date().getDay();
+            const day = req.query.day ? req.query.day : DAYS[today];
             const barbers = await this.#service.GetSchedule(day);
             res.render("index", {barbers, today, day, base: "", active: "home"});
         } catch (err) {
@@ -26,13 +25,13 @@ class Handler {
 
     Order = async (req, res) => {
         try {
-            const today = new Date().getDay();
-            const day = req.query.day ? req.query.day : DAYS[today];
             const client_id = req.user.id;
             const ticket = await this.#orderService.GetMyTicket(client_id);
             if (ticket) {
                 return res.redirect("/ticket");
             }
+            const today = new Date().getDay();
+            const day = req.query.day ? req.query.day : DAYS[today];
             const barbers = await this.#service.GetSchedule(day);
             res.render("order", {barbers, today, day, base: "/order", active: "ticket"});
         } catch (err) {
@@ -116,6 +115,15 @@ class Handler {
         }
     }
 
+    GetOrders = async (req, res) => {
+        try {
+            const orders = await this.#orderService.GetForAdmin();
+            res.render("components/orders", {orders});
+        } catch (err) {
+            res.sendStatus(500);
+        }
+    }
+
     OrderAccept = async (req, res) => {
         const {id} = req.params;
         try {
@@ -130,7 +138,11 @@ class Handler {
     OrderReject = async (req, res) => {
         const {id} = req.params;
         try {
-            await this.#orderService.UpdateState(parseInt(id), "EXPIRED");
+            const order = await this.#orderService.UpdateState(parseInt(id), "EXPIRED");
+            const expiredOrder = await this.#orderService.GetMyExpiredOrder(order.client_id);
+            if (expiredOrder.length >= 3) {
+                await this.#authService.ToggleBan(order.client_id);
+            }
             return res.send("EXPIRED");
         } catch (err) {
             console.log(err);
@@ -140,11 +152,11 @@ class Handler {
 
     GetSchedule = async (req, res) => {
         try {
-            const day = req.query["schedule-day"] ? DAYS[parseInt(req.query["schedule-day"])] : DAYS[new Date().getDay()];
+            const today = new Date().getDay();
+            const day = req.query.day ? req.query.day : DAYS[today];
             const barbers = await this.#service.GetSchedule(day);
             res.render("components/schedule_list", {barbers, day});
         } catch (err) {
-            console.log(err);
             res.status(500).json(err);
         }
     }

@@ -24,7 +24,6 @@ class Auth {
     }
     async Auth(email, password) {
         const person = await this.#repo.LoadOne({email});
-        console.log(person, email);
         const validation = new Validator(
             {email},
             {
@@ -39,6 +38,12 @@ class Auth {
             throw validation.errors;
         }
         return person;
+    }
+
+    async ToggleBan(id) {
+        const person = await this.#repo.LoadOne({id});
+        person.banned = !person.banned;
+        return await this.#repo.Save(person);
     }
 }
 

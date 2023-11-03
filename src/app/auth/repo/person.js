@@ -8,6 +8,11 @@ class Repo {
             savedPerson = await db.create({
                 data: person,
             });
+        } else {
+            savedPerson = await db.update({
+                where: {id: person.id},
+                data: person
+            });
         }
         return new Person(savedPerson);
     }
@@ -20,7 +25,7 @@ class Repo {
                     AND: [{id}, {name}, {email}]
                 }
             }));
-        }else{
+        } else {
             person = (await db.findFirst({
                 where: {
                     OR: [{id}, {name}, {email}]
@@ -29,17 +34,18 @@ class Repo {
         }
         return person ? new Person(person) : null;
     }
-    async Load({id, name, email}, op = null) {
+
+    async Load({id, name, email, banned}, op = null) {
         if (op === "AND" || !op) {
             return (await db.findMany({
                 where: {
-                    AND: [{id}, {name}, {email}]
+                    AND: [{id}, {name}, {email}, {banned}]
                 }
             })).map(person => new Person(person));
         }
         return (await db.findMany({
             where: {
-                OR: [{id}, {name}, {email}]
+                OR: [{id}, {name}, {email}, {banned}]
             }
         })).map(person => new Person(person));
     }
