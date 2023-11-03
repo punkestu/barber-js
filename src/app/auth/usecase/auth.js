@@ -2,38 +2,40 @@ const Validator = require("../../../lib/validator");
 const Person = require("../../../domain/person");
 
 class Auth {
-    #repo;
-    constructor(repo) {
-        this.#repo = repo;
+    #personRepo;
+
+    constructor(personRepo) {
+        this.#personRepo = personRepo;
     }
-    async Register(name, email, password){
+
+    async Register(name, email, password) {
         const validation = new Validator(
             {name, email},
             {
-                name: [{"not_used": (await this.#repo.LoadOne({name}))}],
-                email: [{"not_used": (await this.#repo.LoadOne({email}))}]
+                name: [{"not_used": (await this.#personRepo.LoadOne({name}))}],
+                email: [{"not_used": (await this.#personRepo.LoadOne({email}))}]
             }
         );
-        if(!validation.check()){
-            console.log(validation.errors);
+        if (!validation.check()) {
             throw validation.errors;
         }
-        const person = new Person({name,email,password,role:"CLIENT"});
+        const person = new Person({name, email, password, role: "CLIENT"});
         await person.EncryptPassword();
-        return this.#repo.Save(person);
+        return this.#personRepo.Save(person);
     }
+
     async Auth(email, password) {
-        const person = await this.#repo.LoadOne({email});
+        const person = await this.#personRepo.LoadOne({email});
         const validation = new Validator(
             {email},
             {
                 email: [{"exists": person}]
             }
         );
-        if(!validation.check()){
+        if (!validation.check()) {
             throw validation.errors;
         }
-        if(!(await person.VerifyPassword(password))){
+        if (!(await person.VerifyPassword(password))) {
             validation.errors.add("password", "password is wrong");
             throw validation.errors;
         }
@@ -41,9 +43,9 @@ class Auth {
     }
 
     async ToggleBan(id) {
-        const person = await this.#repo.LoadOne({id});
+        const person = await this.#personRepo.LoadOne({id});
         person.banned = !person.banned;
-        return await this.#repo.Save(person);
+        return await this.#personRepo.Save(person);
     }
 }
 

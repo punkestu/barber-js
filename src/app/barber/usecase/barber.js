@@ -2,12 +2,12 @@ const BarberM = require("../../../domain/barber");
 const Validator = require("../../../lib/validator");
 
 class Barber {
-    #repo;
+    #barberRepo;
     #personRepo;
     #shiftRepo;
 
-    constructor(repo, personRepo, shiftRepo) {
-        this.#repo = repo;
+    constructor(barberRepo, personRepo, shiftRepo) {
+        this.#barberRepo = barberRepo;
         this.#personRepo = personRepo;
         this.#shiftRepo = shiftRepo;
     }
@@ -23,24 +23,24 @@ class Barber {
         if (!validation.check()) {
             throw validation.errors;
         }
-        return this.#repo.Save(new BarberM({barber_id: barber_id, shift_id: shift_id, active: true}));
+        return this.#barberRepo.Save(new BarberM({barber_id: barber_id, shift_id: shift_id, active: true}));
     }
 
     async DropShift(id) {
         const validation = new Validator(
             {id},
             {
-                id: [{"exists": await this.#repo.LoadOne({id})}],
+                id: [{"exists": await this.#barberRepo.LoadOne({id})}],
             }
         );
         if (!validation.check()) {
             throw validation.errors;
         }
-        return this.#repo.Delete(id);
+        return this.#barberRepo.Delete(id);
     }
 
     async ToggleShift(id) {
-        const barber = (await this.#repo.LoadOne({id}));
+        const barber = (await this.#barberRepo.LoadOne({id}));
         const validation = new Validator(
             {id},
             {
@@ -51,7 +51,7 @@ class Barber {
             throw validation.errors;
         }
         barber.active = !barber.active;
-        return this.#repo.Save(barber);
+        return this.#barberRepo.Save(barber);
     }
 }
 

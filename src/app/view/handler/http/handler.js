@@ -17,7 +17,7 @@ class Handler {
             const today = new Date().getDay();
             const day = req.query.day ? req.query.day : DAYS[today];
             const barbers = await this.#service.GetSchedule(day);
-            res.render("index", {barbers, today, day, base: "", active: "home"});
+            res.render("index", {barbers, today, day, base: "", active: "home", cursor: null});
         } catch (err) {
             res.sendStatus(500);
         }
@@ -32,8 +32,7 @@ class Handler {
             }
             const today = new Date().getDay();
             const day = req.query.day ? req.query.day : DAYS[today];
-            const barbers = await this.#service.GetSchedule(day);
-            res.render("order", {barbers, today, day, base: "/order", active: "ticket"});
+            res.render("order", {today, day, base: "/order", active: "ticket"});
         } catch (err) {
             console.log(err);
             res.sendStatus(500);
@@ -43,6 +42,7 @@ class Handler {
     CreateOrder = async (req, res) => {
         const client_id = req.user.id;
         const {date, barber_id} = req.body;
+        console.log(client_id, date, barber_id);
         try {
             console.log(date, client_id, barber_id);
             const ticket = await this.#orderService.GetMyTicket(client_id);
@@ -60,6 +60,7 @@ class Handler {
     Ticket = async (req, res) => {
         const client_id = req.user.id;
         const ticket = await this.#orderService.GetMyTicket(client_id);
+        console.log(ticket);
         if (ticket) {
             res.render("ticket", {ticket, active: "ticket"});
         } else {
@@ -105,6 +106,7 @@ class Handler {
         res.render("ban-screen", {active: null});
     }
 
+    // TODO refactor admin view
     AdminOrder = async (req, res) => {
         try {
             const orders = await this.#orderService.GetForAdmin();
@@ -150,12 +152,14 @@ class Handler {
         }
     }
 
+    // TODO delete all GetSchedule except this
     GetSchedule = async (req, res) => {
         try {
             const today = new Date().getDay();
             const day = req.query.day ? req.query.day : DAYS[today];
+            const cursor = req.query.cursor;
             const barbers = await this.#service.GetSchedule(day);
-            res.render("components/schedule_list", {barbers, day});
+            res.render("components/schedule_list", {barbers, day, cursor});
         } catch (err) {
             res.status(500).json(err);
         }
