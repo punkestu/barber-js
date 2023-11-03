@@ -54,7 +54,7 @@ class Barber {
     }
 
     async LoadOne({id, shift_id, barber_id, active}, op = "AND") {
-        return db.QueryOne(`SELECT b.*${", s.start"} FROM Barber b ${"JOIN Shift s ON (s.id=b.shift_id)"} WHERE ${db.Wheres({
+        return db.QueryOne(`SELECT ${"b.*, s.start"} ${"FROM Barber b"} ${"JOIN Shift s ON (s.id=b.shift_id)"} WHERE ${db.Wheres({
             "b.id": id, shift_id, barber_id, active
         }, op)}`).then(barber => barber ? new BarberM({...barber, shift: {start: new Date(`2000-01-01T${barber.start}.000Z`)}}) : null);
     }

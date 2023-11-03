@@ -5,7 +5,7 @@ const state = {
     }
 };
 
-document.addEventListener("htmx:afterSwap", function (ev) {
+document.addEventListener("htmx:afterSwap", function () {
     Object.keys(state.scroll).forEach((key) => {
         document.getElementById(key).scrollTo(0, state.scroll[key]);
     })

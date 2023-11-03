@@ -35,7 +35,7 @@ class Db {
             });
     }
 
-    static Delete(table, where = "", option = {returns: true}) {
+    static Delete(table, where = "") {
         return this.Query(`DELETE FROM ${table} WHERE ${where}`);
     }
 

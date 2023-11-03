@@ -60,7 +60,6 @@ class Handler {
     Ticket = async (req, res) => {
         const client_id = req.user.id;
         const ticket = await this.#orderService.GetMyTicket(client_id);
-        console.log(ticket);
         if (ticket) {
             res.render("ticket", {ticket, active: "ticket"});
         } else {
