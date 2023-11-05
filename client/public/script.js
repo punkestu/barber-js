@@ -11,6 +11,10 @@ document.addEventListener("htmx:afterSwap", function () {
     })
 })
 
+function hide(id) {
+    document.getElementById(id).classList.add("hidden");
+}
+
 function trackScroll(key) {
     state.scroll[key] = document.getElementById(key).scrollTop;
 }

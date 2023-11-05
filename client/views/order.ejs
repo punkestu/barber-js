@@ -1,18 +1,27 @@
 <!doctype html>
 <html lang="en">
 <%- include("./components/head.ejs")%>
-<body class="bg-[#001058]">
+<body class="bg-[#001058] relative">
 <%- include("./components/header.ejs")%>
-<main class="mx-14 lg:mx-36 mb-8" hx-get="/schedule?day=<%=day%>" hx-target="#schedules-slot" hx-trigger="load">
+<main class="mx-10 lg:mx-36 mb-8" hx-get="/schedule?day=<%=day%>" hx-target="#schedules-slot" hx-trigger="load">
     <section class="flex flex-col items-center">
-        <h1 class="font-medium text-[#001058] bg-[#FFBF1B] rounded-2xl px-6 py-3 text-3xl">Lihat Jadwal</h1>
+        <h1 class="font-medium text-[#001058] bg-[#FFBF1B] rounded-2xl px-6 py-3 text-3xl text-center">Lihat Jadwal</h1>
         <%- include("./components/day_cursor.ejs")%>
     </section>
     <form method="post" action="/app/order" class="flex flex-col items-center">
-        <div id="schedules-slot"></div>
+        <div id="schedules-slot" class="py-2">
+            <%- include("./components/loading.ejs") %>
+        </div>
         <button type="submit" class="mt-4 bg-[#FFBF1B] px-4 py-2 rounded-xl font-black text-3xl" id="confirm_jadwal">Konfirmasi Jadwal</button>
     </form>
 </main>
+<div id="info-shade" class="<%= info ? "" : "hidden"%> flex justify-center items-center fixed h-screen w-screen bg-slate-200 bg-opacity-30 backdrop-blur-md top-0 ">
+    <div class="flex flex-col items-center bg-[#001058] text-[#FFBF1B] px-4 pt-1 pb-4 rounded-lg" onclick="window.location.replace('<%=base%>?day=<%=day%>')">
+        <button class="self-end pt-0 font-black text-4xl" onclick="window.location.replace('<%=base%>?day=<%=day%>')">&#215;</button>
+        <p class="w-14 h-14 font-black mb-2 border-[#FFBF1B] border-2 rounded-full text-center flex items-center justify-center text-3xl">!</p>
+        <p class="capitalize"><%= info%></p>
+    </div>
+</div>
 <%- include("./components/footer.ejs")%>
 <script src="/public/script.js"></script>
 <script src="https://unpkg.com/htmx.org@1.9.6" integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni" crossorigin="anonymous"></script>

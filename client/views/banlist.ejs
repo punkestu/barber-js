@@ -8,7 +8,9 @@
         <input type="email" class="px-2 py-1" placeholder="#Cari Email Pengguna" name="email" hx-get="/admin/ban-list"
                hx-include="[name='email']" hx-swap="outerHTML" hx-target="#ban-list-slot" hx-trigger="keyup">
     </section>
-    <section id="ban-list-slot"></section>
+    <section id="ban-list-slot" class="flex flex-col items-center">
+        <%- include("./components/loading.ejs") %>
+    </section>
 </main>
 <%- include("./components/footer.ejs") %>
 <script src="https://unpkg.com/htmx.org@1.9.6"

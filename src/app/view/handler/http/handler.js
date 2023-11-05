@@ -1,4 +1,6 @@
 const {Sign} = require("../../../../lib/jwt");
+const Errors = require("validatorjs/src/errors");
+const {ErrSchedule} = require("../../../../domain/error");
 const DAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
 class Handler {
@@ -30,6 +32,7 @@ class Handler {
     }
 
     Order = async (req, res) => {
+        const info = req.query.errors ? Buffer.from(req.query.errors, "base64").toString("ascii") : null;
         try {
             const client_id = req.user.id;
             const ticket = await this.#orderService.GetMyTicket(client_id);
@@ -38,7 +41,7 @@ class Handler {
             }
             const today = new Date().getDay();
             const day = req.query.day ? req.query.day : DAYS[today];
-            res.render("order", {today, day, base: "/order", active: "ticket", state: "normal"});
+            res.render("order", {today, day, base: "/order", active: "ticket", state: "normal", info});
         } catch (err) {
             res.sendStatus(500);
         }
@@ -47,15 +50,29 @@ class Handler {
     CreateOrder = async (req, res) => {
         const client_id = req.user.id;
         const {date, barber_id} = req.body;
+        if(!date || !barber_id){
+            return res.redirect("back");
+        }
         try {
             const ticket = await this.#orderService.GetMyTicket(client_id);
             if (ticket) {
-                throw new Error("tidak bisa booking 2 kali");
+                throw new ErrSchedule("tidak bisa booking 2 kali");
             }
             await this.#orderService.CreateOrder(new Date(date), client_id, parseInt(barber_id));
             res.redirect("/ticket");
         } catch (err) {
-            res.redirect("back");
+            if (err instanceof ErrSchedule) {
+                const refererHost = req.headers.referer.split("?")[0];
+                const refererQuery = req.headers.referer.split("?")[1];
+                return res.redirect(`${
+                    refererHost
+                }?${
+                    refererQuery ? refererQuery + "&" : ""
+                }errors=${
+                    Buffer.from(err.message).toString("base64")
+                }`);
+            }
+            res.sendStatus(500);
         }
     }
 
@@ -70,10 +87,14 @@ class Handler {
     }
 
     Login = async (req, res) => {
-        res.render("login", {active: null, state: "auth"});
+        const errors = req.query.errors ? JSON.parse(Buffer.from(req.query.errors, "base64").toString("ascii")) : null;
+        const prev = req.query.val ? JSON.parse(Buffer.from(req.query.val, "base64").toString("ascii")) : null;
+        res.render("login", {active: null, state: "auth", errors, prev});
     }
     Register = async (req, res) => {
-        res.render("register", {active: null, state: "auth"});
+        const errors = req.query.errors ? JSON.parse(Buffer.from(req.query.errors, "base64").toString("ascii")) : null;
+        const prev = req.query.val ? JSON.parse(Buffer.from(req.query.val, "base64").toString("ascii")) : null;
+        res.render("register", {active: null, state: "auth", errors, prev});
     }
 
     AuthLogin = async (req, res) => {
@@ -82,7 +103,16 @@ class Handler {
             const token = await this.#authService.Auth(email, password).then(person => Sign(person));
             res.cookie("TOKEN", token).redirect("/");
         } catch (err) {
-            res.redirect("back");
+            if (err instanceof Errors) {
+                return res.redirect(`${
+                    req.headers.referer.split("?")[0]
+                }?errors=${
+                    Buffer.from(JSON.stringify(err.errors)).toString("base64")
+                }&val=${
+                    Buffer.from(JSON.stringify({email})).toString("base64")
+                }`);
+            }
+            res.sendStatus(500);
         }
     }
 
@@ -93,7 +123,24 @@ class Handler {
                 .then(person => Sign(person));
             res.cookie("TOKEN", token).redirect("/");
         } catch (err) {
-            res.redirect("back");
+            if (err instanceof Errors) {
+                res.redirect(`${
+                    req.headers.referer.split("?")[0]
+                }?errors=${
+                    Buffer.from(JSON.stringify(err.errors)).toString("base64")
+                }&val=${
+                    Buffer.from(JSON.stringify({
+                        full_name,
+                        email,
+                        password,
+                        username,
+                        gender,
+                        address,
+                        phone
+                    })).toString("base64")
+                }`);
+            }
+            res.sendStatus(500);
         }
     }
 
@@ -149,7 +196,8 @@ class Handler {
         const {id} = req.params;
         try {
             await this.#orderService.UpdateState(parseInt(id), "ACCEPTED");
-            return res.send("ACCEPTED");
+            const stateLabel = `<h3 id=\"order-state-${id}\" class="text-center font-bold text-2xl">ACCEPTED</h3>`
+            return res.send(stateLabel);
         } catch (err) {
             return res.sendStatus(400);
         }
@@ -163,7 +211,8 @@ class Handler {
             if (expiredOrder.length >= 3) {
                 await this.#authService.ToggleBan(order.client_id);
             }
-            return res.send("EXPIRED");
+            const stateLabel = `<h3 id=\"order-state-${id}\" class="text-center font-bold text-2xl text-red-600">EXPIRED</h3>`
+            return res.send(stateLabel);
         } catch (err) {
             return res.sendStatus(400);
         }

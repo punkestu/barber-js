@@ -5,4 +5,10 @@ class ErrNotFound extends Error {
     }
 }
 
-module.exports = {ErrNotFound};
+class ErrSchedule extends Error{
+    constructor(why) {
+        super(`schedule ${why}`);
+    }
+}
+
+module.exports = {ErrNotFound, ErrSchedule};

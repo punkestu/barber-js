@@ -8,7 +8,9 @@
         <input type="text" class="px-2 py-1" placeholder="#Cari ID Pesanan" name="id" hx-get="/admin/orders"
                hx-include="[name='id']" hx-swap="outerHTML" hx-target="#orders-slot" hx-trigger="keyup">
     </section>
-    <section id="orders-slot"></section>
+    <section id="orders-slot" class="flex flex-col items-center">
+        <%- include("./components/loading.ejs") %>
+    </section>
 </main>
 <%- include("./components/footer.ejs") %>
 <script src="https://unpkg.com/htmx.org@1.9.6"

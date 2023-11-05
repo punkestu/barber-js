@@ -27,17 +27,24 @@ class Order {
         }, op)}`).then(orders => orders.map(order => new OrderM(order)));
     }
 
-    LoadOne({id, date, barber_id, client_id}, op = "AND") {
+    LoadOne({id, date, barber_id, client_id, state}, op = "AND") {
         return db.QueryOne(`SELECT * FROM ${"`Order`"} WHERE ${db.Wheres({
             id, date, barber_id, client_id, state
         }, op)}`).then(order => new OrderM(order));
+    }
+
+    Ordered({date, barber_id}) {
+        return db.QueryOne(
+            `SELECT * FROM ${"`Order`"} WHERE barber_id=? AND ${"`date`"}>=?`,
+            [barber_id, date]
+        ).then(order => order ? new OrderM(order) : null);
     }
 
     LoadForAdmin({id}) {
         const today = new Date();
         today.setHours(0, 0, 0);
         return db.Query(`SELECT o.*, p.name, p.email FROM ${"`Order`"} o ${"JOIN Person p ON (p.id=o.client_id)"} WHERE o.${"`date`"}>=? ${
-            typeof id !== 'undefined' ? `AND ${db.Where("o.id", id)}` : ""
+                typeof id !== 'undefined' ? `AND ${db.Where("o.id", id)}` : ""
         } ORDER BY o.state, o.${"`date`"}`, [today])
             .then(orders => orders.map(
                 order => new OrderM({
