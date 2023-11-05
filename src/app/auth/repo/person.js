@@ -34,7 +34,7 @@ class Repo {
     }
 
     async LoadOne({id, name, email, role, banned}, op = "AND") {
-        return db.QueryOne(`SELECT pi.*, p.* FROM Person p JOIN PersonInfo pi ON (p.id=pi.person_id) ${db.UseWhere({
+        return db.QueryOne(`SELECT pi.*, p.* FROM Person p LEFT JOIN PersonInfo pi ON (p.id=pi.person_id) ${db.UseWhere({
             id, name, email, role, banned
         })} ${db.Wheres({
             "p.id": id,

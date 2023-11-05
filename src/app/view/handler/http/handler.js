@@ -75,6 +75,7 @@ class Handler {
             const token = await this.#authService.Auth(email, password).then(person => Sign(person));
             res.cookie("TOKEN", token).redirect("/");
         } catch (err) {
+            console.log(err);
             res.redirect("back");
         }
     }
