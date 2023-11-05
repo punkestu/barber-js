@@ -1,4 +1,4 @@
-<header class="mx-10 xl:mx-36 my-4 px-6 py-2 bg-[#FFBF1B] rounded-2xl flex justify-center md:justify-between items-center">
+<header class="mx-10 xl:mx-36 my-4 px-6 py-2 bg-[#FFBF1B] rounded-2xl flex justify-center <%= state !== "auth" ? "md:justify-between" : ""%> items-center">
     <img src="/public/logo.png" class="w-32" alt="">
     <%if(state !== "auth"){%>
         <div class="hidden md:flex md:items-center gap-8 text-[#001058]">
