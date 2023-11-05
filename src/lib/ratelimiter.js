@@ -38,7 +38,7 @@ class Ratelimiter {
     constructor(limit, interval) {
         this.users = [];
         this.limit = limit;
-        this.interval = 10 * 1000;
+        this.interval = interval;
         this.mutex = new Mutex();
     }
 
