@@ -1,13 +1,25 @@
 <header class="mx-10 xl:mx-36 my-4 px-6 py-2 bg-[#FFBF1B] rounded-2xl flex justify-center md:justify-between items-center">
     <img src="/public/logo.png" class="w-32" alt="">
-    <div class="hidden md:flex md:items-center gap-8 text-[#001058]">
-        <a <%if(active==="home"){%>class="font-black"<%}%> href="/">Beranda</a>
-        <a <%if(active==="ticket"){%>class="font-black"<%}%> href="/ticket">Tiket</a>
-        <a class="<%if(active==="profile"){%>font-black<%}%> bg-[#14295F] text-[#FFBF1B] px-4 py-1 rounded-full" href="/profile">Profile</a>
-    </div>
+    <%if(state !== "auth"){%>
+        <div class="hidden md:flex md:items-center gap-8 text-[#001058]">
+            <a <%if(active==="home"){%>class="font-black"<%}%> href="/">Beranda</a>
+            <%if(state === "admin"){%>
+            <a <%if(active==="banlist"){%>class="font-black"<%}%> href="/ban-list">Banned</a>
+            <%}else{%>
+            <a <%if(active==="ticket"){%>class="font-black"<%}%> href="/ticket">Tiket</a>
+            <%}%>
+            <a class="<%if(active==="profile"){%>font-black<%}%> bg-[#14295F] text-[#FFBF1B] px-4 py-1 rounded-full" href="/profile">Profile</a>
+        </div>
+    <%}%>
 </header>
-<nav class="fixed md:hidden bg-[#14295F] text-[#FFBF1B] bottom-0 w-full p-4 pt-6 rounded-t-xl flex justify-evenly">
-    <a <%if(active==="home"){%>class="font-black"<%}%> href="/">Beranda</a>
-    <a <%if(active==="ticket"){%>class="font-black"<%}%> href="/ticket">Tiket</a>
-    <a <%if(active==="profile"){%>class="font-black"<%}%> href="/profile">Profile</a>
-</nav>
+<%if(state !== "auth"){%>
+    <nav class="fixed md:hidden bg-[#14295F] text-[#FFBF1B] bottom-0 w-full p-4 pt-6 rounded-t-xl flex justify-evenly">
+        <a <%if(active==="home"){%>class="font-black"<%}%> href="/">Beranda</a>
+        <%if(state === "admin"){%>
+        <a <%if(active==="banlist"){%>class="font-black"<%}%> href="/ban-list">Banned</a>
+        <%}else{%>
+        <a <%if(active==="ticket"){%>class="font-black"<%}%> href="/ticket">Tiket</a>
+        <%}%>
+        <a <%if(active==="profile"){%>class="font-black"<%}%> href="/profile">Profile</a>
+    </nav>
+<%}%>

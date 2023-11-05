@@ -35,8 +35,12 @@ class Order {
         return this.#repo.Save(order);
     }
 
-    async GetForAdmin() {
-        return this.#repo.LoadForAdmin();
+    async ClearOrder(client_id) {
+        return this.#repo.ClearMy(client_id);
+    }
+
+    async GetForAdmin({id}) {
+        return this.#repo.LoadForAdmin({id});
     }
 }
 

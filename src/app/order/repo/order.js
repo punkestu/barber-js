@@ -33,10 +33,12 @@ class Order {
         }, op)}`).then(order => new OrderM(order));
     }
 
-    LoadForAdmin() {
+    LoadForAdmin({id}) {
         const today = new Date();
         today.setHours(0, 0, 0);
-        return db.Query(`SELECT o.*, p.name, p.email FROM ${"`Order`"} o ${"JOIN Person p ON (p.id=o.client_id)"} WHERE o.${"`date`"}>=? ORDER BY o.state, o.${"`date`"}`, [today])
+        return db.Query(`SELECT o.*, p.name, p.email FROM ${"`Order`"} o ${"JOIN Person p ON (p.id=o.client_id)"} WHERE o.${"`date`"}>=? ${
+            typeof id !== 'undefined' ? `AND ${db.Where("o.id", id)}` : ""
+        } ORDER BY o.state, o.${"`date`"}`, [today])
             .then(orders => orders.map(
                 order => new OrderM({
                     ...order,
@@ -65,6 +67,12 @@ class Order {
                     start: new Date(`2000-01-01T${order.start}.000Z`)
                 })
             }) : null);
+    }
+
+    ClearMy(client_id) {
+        return db.Update("`Order`", {
+            state: "ACCEPTED"
+        }, db.Where("client_id", client_id));
     }
 }
 

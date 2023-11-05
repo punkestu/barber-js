@@ -16,7 +16,14 @@ class Handler {
         try {
             const today = new Date().getDay();
             const day = req.query.day ? req.query.day : DAYS[today];
-            res.render("index", {today, day, base: "", active: "home", cursor: null});
+            res.render("index", {
+                today,
+                day,
+                base: "",
+                active: "home",
+                cursor: null,
+                state: req.user.role === "ADMIN" ? "admin" : "normal"
+            });
         } catch (err) {
             res.sendStatus(500);
         }
@@ -31,7 +38,7 @@ class Handler {
             }
             const today = new Date().getDay();
             const day = req.query.day ? req.query.day : DAYS[today];
-            res.render("order", {today, day, base: "/order", active: "ticket"});
+            res.render("order", {today, day, base: "/order", active: "ticket", state: "normal"});
         } catch (err) {
             res.sendStatus(500);
         }
@@ -56,17 +63,17 @@ class Handler {
         const client_id = req.user.id;
         const ticket = await this.#orderService.GetMyTicket(client_id);
         if (ticket) {
-            res.render("ticket", {ticket, active: "ticket"});
+            res.render("ticket", {ticket, active: "ticket", state: "normal"});
         } else {
             res.redirect("/order");
         }
     }
 
     Login = async (req, res) => {
-        res.render("login", {active: null});
+        res.render("login", {active: null, state: "auth"});
     }
     Register = async (req, res) => {
-        res.render("register", {active: null});
+        res.render("register", {active: null, state: "auth"});
     }
 
     AuthLogin = async (req, res) => {
@@ -75,7 +82,6 @@ class Handler {
             const token = await this.#authService.Auth(email, password).then(person => Sign(person));
             res.cookie("TOKEN", token).redirect("/");
         } catch (err) {
-            console.log(err);
             res.redirect("back");
         }
     }
@@ -92,18 +98,28 @@ class Handler {
     }
 
     Profile = async (req, res) => {
-        res.render("profile", {user: req.user, active: "profile"});
+        res.render("profile", {
+            user: req.user,
+            active: "profile",
+            state: req.user.role === "ADMIN" ? "admin" : "normal"
+        });
     }
 
     BanScreen = (req, res) => {
-        res.render("ban-screen", {active: null});
+        res.render("ban-screen", {active: null, state: "normal"});
     }
 
-    // TODO refactor admin view
     AdminOrder = async (req, res) => {
         try {
-            const orders = await this.#orderService.GetForAdmin();
-            res.render("admin", {orders});
+            res.render("admin", {active: "home", state: "admin"});
+        } catch (err) {
+            res.sendStatus(500);
+        }
+    }
+
+    AdminBanList = async (req, res) => {
+        try {
+            res.render("banlist", {active: "banlist", state: "admin"});
         } catch (err) {
             res.sendStatus(500);
         }
@@ -111,8 +127,19 @@ class Handler {
 
     GetOrders = async (req, res) => {
         try {
-            const orders = await this.#orderService.GetForAdmin();
-            res.render("components/orders", {orders});
+            const id = req.query.id === "" ? undefined : req.query.id;
+            const orders = await this.#orderService.GetForAdmin({id});
+            res.render("components/orders", {orders, id});
+        } catch (err) {
+            res.sendStatus(500);
+        }
+    }
+
+    GetBanList = async (req, res) => {
+        try {
+            const email = req.query.email === "" ? undefined : req.query.email;
+            const bans = await this.#authService.BanList(email);
+            res.render("components/ban_list", {bans, email});
         } catch (err) {
             res.sendStatus(500);
         }
@@ -137,6 +164,19 @@ class Handler {
                 await this.#authService.ToggleBan(order.client_id);
             }
             return res.send("EXPIRED");
+        } catch (err) {
+            return res.sendStatus(400);
+        }
+    }
+
+    OpenBan = async (req, res) => {
+        const {id} = req.params;
+        try {
+            await this.#orderService.ClearOrder(parseInt(id));
+            await this.#authService.ToggleBan(id);
+            const email = req.query.email === "" ? undefined : req.query.email;
+            const bans = await this.#authService.BanList(email);
+            res.render("components/ban_list", {bans, email});
         } catch (err) {
             return res.sendStatus(400);
         }

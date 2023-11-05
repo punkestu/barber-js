@@ -46,6 +46,10 @@ class Auth {
         person.banned = !person.banned;
         return await this.#personRepo.Save(person);
     }
+
+    async BanList(email) {
+        return await this.#personRepo.Load({banned: true, email});
+    }
 }
 
 module.exports = Auth;

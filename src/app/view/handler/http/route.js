@@ -19,8 +19,11 @@ module.exports = function (handler, authMid) {
     router.use(authMid.isRole({view: true, role: "ADMIN"}));
 
     router.get("/admin", handler.AdminOrder);
+    router.get("/ban-list", handler.AdminBanList);
     router.get("/admin/orders", handler.GetOrders);
+    router.get("/admin/ban-list", handler.GetBanList);
     router.get("/admin/acceptance/:id", handler.OrderAccept);
     router.get("/admin/rejection/:id", handler.OrderReject);
+    router.get("/admin/white/:id", handler.OpenBan);
     return router;
 }

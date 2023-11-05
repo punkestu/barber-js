@@ -22,7 +22,8 @@ class Repo {
             name: person.name,
             email: person.email,
             password: person.password,
-            role: person.role
+            role: person.role,
+            banned: person.banned
         }, db.Where("id", person.id));
         await db.Update("PersonInfo", {
             username: person.username,
@@ -47,7 +48,7 @@ class Repo {
     }
 
     async Load({id, name, email, role, banned}, op = "AND") {
-        return db.Query(`SELECT * FROM Person p JOIN PersonInfo pi ON (p.id=pi.person_id) ${db.UseWhere({
+        return db.Query(`SELECT pi.*, p.* FROM Person p LEFT JOIN PersonInfo pi ON (p.id=pi.person_id) ${db.UseWhere({
             id, name, email, role, banned
         })} ${db.Wheres({
             "p.id": id,
