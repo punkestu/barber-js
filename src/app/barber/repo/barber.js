@@ -68,7 +68,7 @@ class Barber {
     async LoadByBarber({day}) {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        return db.Query(`SELECT p.id as kapster_id, p.name, p.email, s.*, b.id as barber_id, b.active, ${"(o.id IS NOT NULL AND o.date >= ?)"} as ordered FROM Barber b ${"LEFT JOIN `Order` o on b.id = o.barber_id"} ${"JOIN Shift s on s.id = b.shift_id"} ${"JOIN Person p ON b.barber_id = p.id"} WHERE p.role=? AND s.day=?`, [today, "BARBER", day])
+        return db.Query(`SELECT p.id as kapster_id, p.name, p.email, s.*, b.id as barber_id, b.active, ${"(o.id IS NOT NULL AND o.date >= ?)"} as ordered FROM Barber b ${"LEFT JOIN `Order` o on b.id = o.barber_id"} ${"JOIN Shift s on s.id = b.shift_id"} ${"JOIN Person p ON b.barber_id = p.id"} WHERE p.role=? AND s.day=? ORDER BY s.start`, [today, "BARBER", day])
             .then(schedules => {
                 return schedules.reduce(scheduleReducer, []).filter(s => s)
             });

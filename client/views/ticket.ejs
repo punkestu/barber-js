@@ -14,9 +14,8 @@
         <div class="w-full md:px-16 text-slate-700 flex flex-col gap-2">
             <p class="flex justify-between">Nomor Pemesanan<span class="font-semibold text-right"><%= ticket.id%></span></p>
             <p class="flex justify-between">Nama Lengkap<span class="font-semibold text-right"><%= ticket.client.name%></span></p>
-<!-- TODO do the user data -->
-            <p class="flex justify-between">Alamat<span class="font-semibold text-right">Jl. Jambu 1 no. 67, Sumbersari, Jember</span></p>
-            <p class="flex justify-between">Jenis Kelamin<span class="font-semibold text-right">Laki-laki</span></p>
+            <p class="flex justify-between">Alamat<span class="font-semibold text-right"><%= ticket.client.alamat%></span></p>
+            <p class="flex justify-between">Jenis Kelamin<span class="font-semibold text-right"><%= ticket.client.gender%></span></p>
             <p class="flex justify-between">Jadwal<span class="font-semibold text-right"><%= ticket.date.toLocaleDateString('id-ID', {day: "2-digit", month: 'long', year: "numeric"})%> | <%= ticket.shift.start.toLocaleTimeString('id-ID', {hour12: false}).slice(0,5)%></span></p>
             <p class="flex justify-between">Kapster<span class="font-semibold text-right"><%= ticket.barber.name%></span></p>
         </div>

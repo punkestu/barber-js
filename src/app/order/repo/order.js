@@ -36,7 +36,7 @@ class Order {
     LoadForAdmin() {
         const today = new Date();
         today.setHours(0, 0, 0);
-        db.Query(`SELECT o.*, p.name, p.email FROM ${"`Order`"} o ${"JOIN Person p ON (p.id=o.client_id)"} WHERE o.${"`date`"}>=? ORDER BY o.state, o.${"`date`"}`, [today])
+        return db.Query(`SELECT o.*, p.name, p.email FROM ${"`Order`"} o ${"JOIN Person p ON (p.id=o.client_id)"} WHERE o.${"`date`"}>=? ORDER BY o.state, o.${"`date`"}`, [today])
             .then(orders => orders.map(
                 order => new OrderM({
                     ...order,
@@ -47,12 +47,14 @@ class Order {
 
     LoadOneIsValid(client_id) {
         const today = new Date();
-        return db.QueryOne(`SELECT o.*, p.name as c_name, p.email as c_email, pb.name as b_name, pb.email as b_email, ${"s.start"}, s.day FROM ${"`Order`"} o ${"JOIN Person p ON (p.id=o.client_id)"} ${"JOIN Barber b ON (o.barber_id=b.id)"} ${"JOIN Person pb ON (pb.id=b.barber_id)"} ${"JOIN Shift s ON (b.shift_id=s.id)"} WHERE o.${"`date`"}>=? AND o.client_id=? AND state='ORDERED' ORDER BY o.${"`date`"}`, [today, client_id])
+        return db.QueryOne(`SELECT o.*, p.name as c_name, p.email as c_email, pi.alamat as c_alamat, pi.gender as c_gender, pb.name as b_name, pb.email as b_email, ${"s.start"}, s.day FROM ${"`Order`"} o ${"JOIN Person p ON (p.id=o.client_id)"} ${"LEFT JOIN PersonInfo pi ON (p.id=pi.person_id)"} ${"JOIN Barber b ON (o.barber_id=b.id)"} ${"JOIN Person pb ON (pb.id=b.barber_id)"} ${"JOIN Shift s ON (b.shift_id=s.id)"} WHERE o.${"`date`"}>=? AND o.client_id=? AND state='ORDERED' ORDER BY o.${"`date`"}`, [today, client_id])
             .then(order => order ? new OrderM({
                 ...order,
                 client: new PersonM({
                     name: order.c_name,
-                    email: order.c_email
+                    email: order.c_email,
+                    alamat: order.c_alamat,
+                    gender: order.c_gender
                 }),
                 barber: new PersonM({
                     name: order.b_name,

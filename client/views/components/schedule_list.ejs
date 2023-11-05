@@ -2,7 +2,7 @@
     <%
     const DAYS3 = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
     const tanggal = new Date();
-    tanggal.setDate(tanggal.getDate() - tanggal.getDay() + DAYS3.findIndex(_day=>day === _day));
+    tanggal.setDate(tanggal.getDate() + (7 - tanggal.getDay() + DAYS3.findIndex(_day=>day === _day))%7);
     %>
     <input type="hidden" name="date" value="<%= tanggal.toISOString()%>">
     <input type="hidden" name="cursor" id="schedule-cursor" value="<%= cursor%>">

@@ -8,18 +8,17 @@ class Auth {
         this.#personRepo = personRepo;
     }
 
-    async Register(name, email, password) {
+    async Register(name, email, password, username, gender, alamat, nohp) {
         const validation = new Validator(
-            {name, email},
+            {email},
             {
-                name: [{"not_used": (await this.#personRepo.LoadOne({name}))}],
                 email: [{"not_used": (await this.#personRepo.LoadOne({email}))}]
             }
         );
         if (!validation.check()) {
             throw validation.errors;
         }
-        const person = new Person({name, email, password, role: "CLIENT"});
+        const person = new Person({name, email, password, role: "CLIENT", username, gender, alamat, nohp});
         await person.EncryptPassword();
         return this.#personRepo.Save(person);
     }

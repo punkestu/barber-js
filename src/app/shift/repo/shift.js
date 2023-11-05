@@ -19,14 +19,14 @@ class Shift {
     }
 
     async LoadOne({id, start, day}, op = "AND") {
-        return db.QueryOne(`SELECT * FROM Shift WHERE ${db.Wheres({
+        return db.QueryOne(`SELECT * FROM Shift ${db.UseWhere({id, start, day})} ${db.Wheres({
             id, start, day
         }, op)}`, [id, start, day])
             .then(shift => new ShiftM(shift));
     }
 
     async Load({id, start, day}, op = null) {
-        return db.Query(`SELECT * FROM Shift WHERE ${db.Wheres({
+        return db.Query(`SELECT * FROM Shift ${db.UseWhere({id, start, day})} ${db.Wheres({
             id, start, day
         }, op)}`, [id, start, day])
             .then(shifts => shifts.map(shift => new ShiftM(shift)));

@@ -1,7 +1,7 @@
 <div class="w-1/3 md:w-1/4 xl:w-1/6 p-1">
     <label id="schedule-<%= schedule.id %>"
            class="block <% if(schedule.active && !schedule.ordered){ %>cursor-pointer<%if(cursor == schedule.id){%> bg-blue-500 text-white<%} }else{ %>bg-[#FF1D1D] text-white cursor-not-allowed<% } %> px-2 py-1 rounded-full text-center border-2">
-        <input type="radio" name="barber_id"
+        <input type="radio" name="barber_id" class="hidden"
                <% if(schedule.active && !schedule.ordered){ %>onchange="toggleSchedulePill(<%= schedule.id%>)" <% }else{ %>disabled
                 <% } %>
         <%if(cursor == schedule.id){%>checked<%}%>

@@ -29,4 +29,4 @@ app.use("/order", order.http);
 const view = require("../src/app/view")(barber.repo, auth.service, order.service, authMid);
 app.use("/", view.http);
 
-app.listen(3000, ()=>console.log("listen at :3000"));
+app.listen(process.env.PORT || 3000);

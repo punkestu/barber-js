@@ -16,25 +16,22 @@ function trackScroll(key) {
 }
 
 function toggleSchedulePill(id) {
-    if (state.schedulePill !== id) {
-        const schedule = document.getElementById(`schedule-${id}`);
-        if (!schedule) {
-            return;
-        }
-        const prevSchedule = document.getElementById(`schedule-${state.schedulePill}`);
-        if (prevSchedule) {
-            prevSchedule.classList.remove("bg-blue-500");
-            prevSchedule.classList.remove("text-white");
-        }
-        state.schedulePill = id;
-        schedule.classList.add("bg-blue-500");
-        schedule.classList.add("text-white");
-        document.getElementById("schedule-cursor").value = id;
+    const schedule = document.getElementById(`schedule-${id}`);
+    if (!schedule) {
+        return;
     }
+    const prevSchedule = document.getElementById(`schedule-${state.schedulePill}`);
+    if (prevSchedule) {
+        prevSchedule.classList.remove("bg-blue-500");
+        prevSchedule.classList.remove("text-white");
+    }
+    state.schedulePill = id;
+    schedule.classList.add("bg-blue-500");
+    schedule.classList.add("text-white");
+    document.getElementById("schedule-cursor").value = id;
 }
 
 function ClearCookies() {
-    console.log("must be clear");
     const Cookies = document.cookie.split(';');
     for (let i = 0; i < Cookies.length; i++) {
         document.cookie = Cookies[i] + "=; expires=" + new Date(0).toUTCString();

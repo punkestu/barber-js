@@ -36,7 +36,7 @@ class Db {
     }
 
     static Delete(table, where = "") {
-        return this.Query(`DELETE FROM ${table} WHERE ${where}`);
+        return this.Query(`DELETE FROM ${table} ${where ? `WHERE ${where}` : ""}`);
     }
 
     static Update(table, values, where = "") {
@@ -58,6 +58,10 @@ class Db {
 
     static #sets(values) {
         return Object.keys(values).filter(v => typeof values[v] !== 'undefined').map(v => `${v}=?`).join(`, `);
+    }
+
+    static UseWhere(params) {
+        return Object.values(params).filter(p=>typeof p !== 'undefined').length > 0 ? "WHERE" : "";
     }
 
     static Where(key, val) {

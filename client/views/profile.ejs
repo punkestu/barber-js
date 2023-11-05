@@ -9,7 +9,7 @@
             <div class="w-20 h-20 rounded-full bg-slate-200"></div>
             <aside>
                 <h1 class="font-black text-3xl"><%= user.name %></h1>
-                <p class="opacity-60">Jember</p>
+                <p class="opacity-60"><%= user.role%></p>
             </aside>
         </header>
         <div class="md:hidden text-[#14295F] bg-white px-6 py-3 rounded-2xl flex flex-col gap-2">
@@ -21,7 +21,15 @@
             </div>
             <div>
                 <h3 class="font-medium text-xl">Username</h3>
-                <p><%= user.name %></p>
+                <p><%= user.username %></p>
+            </div>
+            <div>
+                <h3 class="font-medium text-xl">No HP</h3>
+                <p><%= user.nohp %></p>
+            </div>
+            <div>
+                <h3 class="font-medium text-xl">Alamat</h3>
+                <p><%= user.alamat %></p>
             </div>
         </div>
         <nav class="bg-white font-bold px-6 py-3 rounded-2xl">
@@ -31,13 +39,27 @@
     <aside class="text-[#14295F] bg-white px-6 py-3 rounded-2xl flex-grow hidden md:flex flex-col gap-2">
         <h2 class="text-[#FFBF1B] font-bold text-2xl">Profile</h2>
         <hr>
-        <div>
-            <h3 class="font-medium text-xl">Email</h3>
-            <p><%= user.email %></p>
-        </div>
-        <div>
-            <h3 class="font-medium text-xl">Username</h3>
-            <p><%= user.name %></p>
+        <div class="flex gap-4">
+            <div class="flex flex-col gap-2">
+                <div>
+                    <h3 class="font-medium text-xl">Email</h3>
+                    <p><%= user.email %></p>
+                </div>
+                <div>
+                    <h3 class="font-medium text-xl">Username</h3>
+                    <p><%= user.username %></p>
+                </div>
+            </div>
+            <div class="flex flex-col gap-2">
+                <div>
+                    <h3 class="font-medium text-xl">No HP</h3>
+                    <p><%= user.nohp %></p>
+                </div>
+                <div>
+                    <h3 class="font-medium text-xl">Alamat</h3>
+                    <p><%= user.alamat %></p>
+                </div>
+            </div>
         </div>
     </aside>
 </main>

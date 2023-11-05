@@ -11,9 +11,7 @@ class Order {
 
     async CreateOrder(date, client_id, barber_id) {
         const schedule = await this.#barberRepo.LoadOne({id: barber_id});
-        console.log(schedule);
         date.setHours(schedule.shift.start.getHours(), schedule.shift.start.getMinutes());
-        console.log(date);
         if (date < new Date()) {
             throw new Error("invalid schedule");
         }

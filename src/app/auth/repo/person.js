@@ -9,31 +9,52 @@ class Repo {
                 email: person.email,
                 password: person.password,
                 role: person.role
-            }).then(newPerson => new Person(newPerson));
+            }).then(newPerson => db.Insert("PersonInfo", {
+                    person_id: newPerson.id,
+                    username: person.username,
+                    gender: person.gender,
+                    alamat: person.alamat,
+                    nohp: person.nohp,
+                }).then(personInfo => new Person({...personInfo, ...newPerson}))
+            );
         }
         await db.Update("Person", {
             name: person.name,
             email: person.email,
             password: person.password,
             role: person.role
-        }, db.Where("id", person.id))
+        }, db.Where("id", person.id));
+        await db.Update("PersonInfo", {
+            username: person.username,
+            gender: person.gender,
+            alamat: person.alamat,
+            nohp: person.nohp,
+        }, db.Where("person_id", person.id));
         return person;
     }
 
-    async LoadOne({id, name, email}, op = "AND") {
-        return db.QueryOne(`SELECT * FROM Person WHERE ${db.Wheres({
-            id,
+    async LoadOne({id, name, email, role, banned}, op = "AND") {
+        return db.QueryOne(`SELECT pi.*, p.* FROM Person p JOIN PersonInfo pi ON (p.id=pi.person_id) ${db.UseWhere({
+            id, name, email, role, banned
+        })} ${db.Wheres({
+            "p.id": id,
             name,
-            email
+            email,
+            role,
+            banned
         }, op)}`)
             .then(person => person ? new Person(person) : null);
     }
 
-    async Load({id, name, email, banned}, op = "AND") {
-        return db.Query(`SELECT * FROM Person WHERE ${db.Wheres({
-            id,
+    async Load({id, name, email, role, banned}, op = "AND") {
+        return db.Query(`SELECT * FROM Person p JOIN PersonInfo pi ON (p.id=pi.person_id) ${db.UseWhere({
+            id, name, email, role, banned
+        })} ${db.Wheres({
+            "p.id": id,
             name,
-            email
+            email,
+            role,
+            banned
         }, op)}`)
             .then(persons => persons.map(person => new Person(person)));
     }
