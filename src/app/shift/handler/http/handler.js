@@ -39,7 +39,6 @@ class Handler {
             if(err instanceof Errors){
                 return res.status(400).json(err);
             }
-            console.log(err);
             res.sendStatus(500);
         }
     }
@@ -69,7 +68,6 @@ class Handler {
             if(err instanceof Errors){
                 return res.status(400).json(err);
             }
-            console.log(err);
             res.sendStatus(500);
         }
     }

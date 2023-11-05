@@ -1,107 +1,82 @@
-const {barber: db, person: db2} = require("../../../lib/prisma");
-const Barber = require("../../../domain/barber");
-const Schedule = require("../../../domain/schedule");
+const db = require("../../../lib/db");
+const BarberM = require("../../../domain/barber");
+const {Schedules: SchedulesM, Schedule: ScheduleM} = require("../../../domain/schedule");
+const PersonM = require("../../../domain/person");
 
-class Repo {
+function scheduleReducer(barbers, schedule) {
+    if (!barbers[schedule.kapster_id]) {
+        barbers[schedule.kapster_id] = new SchedulesM({
+            barber: new PersonM({
+                name: schedule.name,
+                email: schedule.email
+            }),
+            schedules: [new ScheduleM({
+                id: schedule.barber_id,
+                start: schedule.start,
+                end: schedule.end,
+                day: schedule.day,
+                barber_id: schedule.barber_id,
+                active: schedule.active,
+                ordered: schedule.ordered
+            })]
+        });
+    } else {
+        barbers[schedule.kapster_id].schedules.push(
+            new ScheduleM({
+                id: schedule.barber_id,
+                start: schedule.start,
+                end: schedule.end,
+                day: schedule.day,
+                barber_id: schedule.barber_id,
+                active: schedule.active,
+                ordered: schedule.ordered
+            })
+        );
+    }
+    return barbers;
+}
+
+class Barber {
     async Save(barber) {
-        let savedBarber;
-        if (!barber.id) {
-            savedBarber = await db.create({
-                data: {
-                    barber_id: barber.barber_id,
-                    shift_id: barber.shift_id,
-                    active: barber.active
-                }
-            });
-            return new Barber(savedBarber);
-        }
-        savedBarber = await db.update({
-            data: {
+        if (typeof barber.id === 'undefined') {
+            return db.Insert("Barber", {
                 barber_id: barber.barber_id,
                 shift_id: barber.shift_id,
                 active: barber.active
-            },
-            where: {
-                id: barber.id
-            }
-        });
-        return new Barber(savedBarber);
+            }).then(newBarber => new BarberM(newBarber));
+        }
+        await db.Update("Barber", {
+            barber_id: barber.barber_id,
+            shift_id: barber.shift_id,
+            active: barber.active
+        }, db.Where("id", barber.id));
+        return barber;
     }
 
-    async LoadOne({id, shift_id, barber_id, active}, op = null) {
-        let barber;
-        if (op === "AND" || !op) {
-            barber = await db.findFirst({
-                where: {
-                    AND: [{id}, {shift_id}, {barber_id}, {active}]
-                },
-                include: {
-                    shift: true
-                }
-            });
-        } else {
-            barber = await db.findFirst({
-                where: {
-                    OR: [{id}, {shift_id}, {barber_id}, {active}]
-                },
-                include: {
-                    shift: true
-                }
-            });
-        }
-        return barber ? new Barber(barber) : null;
+    async LoadOne({id, shift_id, barber_id, active}, op = "AND") {
+        return db.QueryOne(`SELECT ${"b.*, s.start"} ${"FROM Barber b"} ${"JOIN Shift s ON (s.id=b.shift_id)"} WHERE ${db.Wheres({
+            "b.id": id, shift_id, barber_id, active
+        }, op)}`).then(barber => barber ? new BarberM({...barber, shift: {start: new Date(`2000-01-01T${barber.start}.000Z`)}}) : null);
     }
 
-    async Load({id, shift_id, barber_id, active}, op = null) {
-        if (op === "AND" || !op) {
-            return (await db.findMany({
-                where: {
-                    AND: [{id}, {shift_id}, {barber_id}, {active}]
-                }
-            })).map(barber => new Barber(barber));
-        }
-        return (await db.findMany({
-            where: {
-                OR: [{id}, {shift_id}, {barber_id}, {active}]
-            }
-        })).map(barber => new Barber(barber));
+    async Load({id, shift_id, barber_id, active}, op = "AND") {
+        return db.Query(`SELECT * FROM Barber WHERE ${db.Wheres({
+            id, shift_id, barber_id, active
+        }, op)}`).then(barbers => barbers.map(barber => new BarberM(barber)));
     }
 
     async LoadByBarber({day}) {
         const today = new Date();
-        today.setHours(0,0,0,0);
-        return db2.findMany({
-            where: {
-                role: "BARBER",
-            },
-            select: {
-                name: true,
-                email: true,
-                Barber: {
-                    where: {shift: {day:day}},
-                    select: {
-                        id: true, active: true, shift: true, Order: {
-                            where: {
-                                date: {gte: today}
-                            }
-                        }
-                    }
-                }
-            }
-        }).then(barbers => {
-            return barbers.map(barber =>
-                new Schedule({
-                    barber: {...barber, Barber: undefined},
-                    schedules: barber.Barber
-                }));
-        });
+        today.setHours(0, 0, 0, 0);
+        return db.Query(`SELECT p.id as kapster_id, p.name, p.email, s.*, b.id as barber_id, b.active, ${"(o.id IS NOT NULL AND o.date >= ?)"} as ordered FROM Barber b ${"LEFT JOIN `Order` o on b.id = o.barber_id"} ${"JOIN Shift s on s.id = b.shift_id"} ${"JOIN Person p ON b.barber_id = p.id"} WHERE p.role=? AND s.day=? ORDER BY s.start`, [today, "BARBER", day])
+            .then(schedules => {
+                return schedules.reduce(scheduleReducer, []).filter(s => s)
+            });
     }
 
     async Delete(id) {
-        return db.delete({
-            where: {id}
-        });
+        return db.Delete("Barber", db.Where("id", id));
     }
 }
 
-module.exports = Repo;
+module.exports = Barber;

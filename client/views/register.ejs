@@ -1,31 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include("./components/head.ejs")%>
+<%- include("./components/head.ejs") %>
 <body class="bg-[#001058]">
-<%- include("./components/header.ejs")%>
+<%- include("./components/header.ejs") %>
 <main class="flex flex-col lg:flex-row items-center lg:justify-center lg:items-start py-7 lg:py-16 gap-2 lg:gap-8">
     <img src="/public/illustration1.png" class="w-1/2 md:w-1/3 lg:w-auto" alt="">
     <aside class="flex flex-col items-center sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/2 gap-5">
         <h1 class="text-[#FFBF1B] font-black text-3xl">DAFTAR</h1>
-        <form action="/auth/register" method="post" class="flex flex-col items-center w-full px-14 gap-5">
-            <input name="email" type="email" placeholder="Email" class="w-full px-6 py-3 rounded-xl placeholder:text-[#001058]" required>
-            <input name="username" type="text" placeholder="Username" class="w-full px-6 py-3 rounded-xl placeholder:text-[#001058]" required>
-            <input name="full_name" type="text" placeholder="Nama lengkap" class="w-full px-6 py-3 rounded-xl placeholder:text-[#001058]" required>
-            <input name="address" type="text" placeholder="Alamat" class="w-full px-6 py-3 rounded-xl placeholder:text-[#001058]" required>
-            <select name="gender" class="w-full px-6 py-3 rounded-xl text-[#001058]" required>
-                <option disabled selected>Jenis kelamin</option>
-                <option value="laki">Laki-laki</option>
-                <option value="perempuan">Perempuan</option>
-            </select>
-            <input name="phone" type="tel" placeholder="No. HP" class="w-full px-6 py-3 rounded-xl placeholder:text-[#001058]" required>
-            <input name="password" type="password" placeholder="Password" class="w-full px-6 py-3 rounded-xl placeholder:text-[#001058]" required>
+        <form action="/auth/register" method="post" class="flex flex-col items-center w-full px-14">
+            <div class="w-full">
+                <input name="email" type="email" placeholder="Email"
+                       class="w-full px-6 py-3 rounded-xl placeholder:text-[#001058]"
+                       value="<%= prev ? prev.email : "" %>" required>
+                <p class="h-6 text-[#FFBF1B] capitalize">
+                    <% if(errors && errors.email) { %> <span
+                            class="px-2 rounded-full bg-[#FFBF1B] me-2">.</span>  <%= errors.email %>
+                    <% } %>
+                </p>
+            </div>
+            <div class="w-full mb-6">
+                <input name="username" type="text" placeholder="Username"
+                       class="w-full px-6 py-3 rounded-xl placeholder:text-[#001058]"
+                       value="<%= prev ? prev.username : "" %>" required>
+            </div>
+            <div class="w-full mb-6">
+                <input name="full_name" type="text" placeholder="Nama Lengkap"
+                       class="w-full px-6 py-3 rounded-xl placeholder:text-[#001058]"
+                       value="<%= prev ? prev.full_name : "" %>" required>
+            </div>
+            <div class="w-full mb-6">
+                <input name="address" type="text" placeholder="Alamat"
+                       class="w-full px-6 py-3 rounded-xl placeholder:text-[#001058]"
+                       value="<%= prev ? prev.address : "" %>"
+                       required>
+            </div>
+            <div class="w-full mb-6">
+                <select name="gender" class="w-full px-6 py-3 rounded-xl text-[#001058]" required>
+                    <option disabled selected>Jenis kelamin</option>
+                    <option value="Laki-laki" <%= prev && prev.gender === "Laki-laki" ? "selected" : "" %>>Laki-laki
+                    </option>
+                    <option value="Perempuan" <%= prev && prev.gender === "Perempuan" ? "selected" : "" %>>Perempuan
+                    </option>
+                </select>
+            </div>
+            <div class="w-full mb-6">
+                <input name="phone" type="tel" placeholder="No. HP"
+                       class="w-full px-6 py-3 rounded-xl placeholder:text-[#001058]"
+                       value="<%= prev ? prev.phone : "" %>"
+                       required>
+            </div>
+            <div class="w-full mb-6">
+                <input name="password" type="password" placeholder="Password"
+                       class="w-full px-6 py-3 rounded-xl placeholder:text-[#001058]" required>
+            </div>
             <button class="bg-[#FFBF1B] px-6 py-3 text-white font-black text-xl rounded-xl">DAFTAR</button>
         </form>
         <div class="px-14 w-full flex flex-col gap-4 items-center text-white">
-            <p>Sudah punya akun? <a class="font-semibold text-[#FFBF1B] underline" href="#">Masuk</a></p>
+            <p>Sudah punya akun? <a class="font-semibold text-[#FFBF1B] underline" href="/login">Masuk</a></p>
         </div>
     </aside>
 </main>
-<%- include("./components/footer.ejs")%>
+<%- include("./components/footer.ejs") %>
 </body>
 </html>
