@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use("/public", express.static(join(__dirname, "../client/public")));
 
-const rateLimiter = new (require("../src/lib/ratelimiter").Ratelimiter)(12, 1000 * 60);
+const rateLimiter = new (require("../src/lib/ratelimiter").Ratelimiter)(10, 1000 * 60);
 
 const auth = require("../src/app/auth")();
 const authMid = require("../src/middleware/auth")(auth.repo);

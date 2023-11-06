@@ -4,13 +4,26 @@ const PersonM = require("../../../domain/person");
 const ShiftM = require("../../../domain/shift");
 
 class Order {
+    #cacheMem = {};
+
+    constructor() {
+        this.CacheLoadForAdmin().then(() => {
+            setInterval(async () => {
+                await this.CacheLoadForAdmin();
+            }, 30 * 60 * 1000);
+        })
+    }
+
     async Save(order) {
         if (!order.id) {
             return db.Insert("`Order`", {
                 client_id: order.client_id,
                 barber_id: order.barber_id,
                 date: order.date
-            }).then(order => new OrderM(order));
+            }).then(order => {
+                this.CacheLoadForAdmin().then();
+                return new OrderM(order);
+            });
         }
         await db.Update("`Order`", {
             client_id: order.client_id,
@@ -18,6 +31,7 @@ class Order {
             date: order.date,
             state: order.state
         }, db.Where("id", order.id));
+        this.CacheLoadForAdmin().then();
         return order;
     }
 
@@ -40,12 +54,17 @@ class Order {
         ).then(order => order ? new OrderM(order) : null);
     }
 
-    LoadForAdmin({id}) {
+    async LoadForAdmin({id}, {start, limit}) {
+        if (typeof id !== 'undefined') {
+            return this.#cacheMem.LoadForAdmin.filter(c => c.id === id).slice(start, limit);
+        }
+        return this.#cacheMem.LoadForAdmin.slice(start, limit);
+    }
+
+    async CacheLoadForAdmin() {
         const today = new Date();
         today.setHours(0, 0, 0);
-        return db.Query(`SELECT o.*, p.name, p.email FROM ${"`Order`"} o ${"JOIN Person p ON (p.id=o.client_id)"} WHERE o.${"`date`"}>=? ${
-                typeof id !== 'undefined' ? `AND ${db.Where("o.id", id)}` : ""
-        } ORDER BY o.state, o.${"`date`"}`, [today])
+        this.#cacheMem.LoadForAdmin = await db.Query(`SELECT o.*, p.name, p.email FROM ${"`Order`"} o ${"JOIN Person p ON (p.id=o.client_id)"} WHERE o.${"`date`"}>=? ORDER BY o.state, o.${"`date`"}`, [today].filter(c => typeof c !== 'undefined'))
             .then(orders => orders.map(
                 order => new OrderM({
                     ...order,
@@ -79,7 +98,10 @@ class Order {
     ClearMy(client_id) {
         return db.Update("`Order`", {
             state: "ACCEPTED"
-        }, db.Where("client_id", client_id));
+        }, db.Where("client_id", client_id))
+            .then(() => {
+                this.CacheLoadForAdmin().then();
+            });
     }
 }
 

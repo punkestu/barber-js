@@ -2,6 +2,12 @@ const db = require("../../../lib/db");
 const Person = require("../../../domain/person");
 
 class Repo {
+    #cacheMem = {};
+
+    constructor() {
+        this.CacheLoadBanned().then();
+    }
+
     async Save(person) {
         if (typeof person.id === "undefined") {
             return db.Insert("Person", {
@@ -47,7 +53,7 @@ class Repo {
             .then(person => person ? new Person(person) : null);
     }
 
-    async Load({id, name, email, role, banned}, op = "AND") {
+    async Load({id, name, email, role, banned}, {start, limit}, op = "AND") {
         return db.Query(`SELECT pi.*, p.* FROM Person p LEFT JOIN PersonInfo pi ON (p.id=pi.person_id) ${db.UseWhere({
             id, name, email, role, banned
         })} ${db.Wheres({
@@ -56,8 +62,19 @@ class Repo {
             email,
             role,
             banned
-        }, op)}`)
+        }, op)} ${typeof limit !== 'undefined' ? "LIMIT ?" : ""} ${typeof start !== 'undefined' ? "OFFSET ?" : ""}`, [limit, start].filter(c => typeof c !== 'undefined'))
             .then(persons => persons.map(person => new Person(person)));
+    }
+
+    async LoadBanned({email, start, limit}) {
+        if (typeof email !== 'undefined') {
+            return this.#cacheMem.LoadBanned.filter(c => c.email === email);
+        }
+        return this.#cacheMem.LoadBanned.slice(start, limit);
+    }
+
+    async CacheLoadBanned() {
+        this.#cacheMem.LoadBanned = await this.Load({banned: true}, {});
     }
 }
 

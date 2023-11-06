@@ -1,4 +1,4 @@
-<section id="ban-list-slot" class="flex flex-wrap" hx-get="/admin/ban-list?email=<%= email %>" hx-swap="outerHTML" hx-target="this" hx-trigger="every 5s">
+<section id="ban-list-slot" class="flex flex-wrap" hx-get="/admin/ban-list?email=<%= email %>" hx-swap="outerHTML" hx-target="this" hx-trigger="every 6s">
     <% bans.forEach(ban=>{ %>
         <div class="w-full sm:w-1/2 md:w-1/3 xl:w-1/6 px-4 py-2 sm:p-1">
             <div class="bg-[#FFBF1B] p-2">

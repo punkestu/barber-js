@@ -50,7 +50,7 @@ class Handler {
     CreateOrder = async (req, res) => {
         const client_id = req.user.id;
         const {date, barber_id} = req.body;
-        if(!date || !barber_id){
+        if (!date || !barber_id) {
             return res.redirect("back");
         }
         try {
@@ -175,8 +175,9 @@ class Handler {
     GetOrders = async (req, res) => {
         try {
             const id = req.query.id === "" ? undefined : req.query.id;
-            const orders = await this.#orderService.GetForAdmin({id});
-            res.render("components/orders", {orders, id});
+            const page = parseInt(req.query.page) || 0;
+            const orders = await this.#orderService.GetForAdmin({id}, {page});
+            res.render("components/orders", {orders, id, page});
         } catch (err) {
             res.sendStatus(500);
         }
@@ -185,7 +186,8 @@ class Handler {
     GetBanList = async (req, res) => {
         try {
             const email = req.query.email === "" ? undefined : req.query.email;
-            const bans = await this.#authService.BanList(email);
+            const page = parseInt(req.query.page) || 0;
+            const bans = await this.#authService.BanList({page, email});
             res.render("components/ban_list", {bans, email});
         } catch (err) {
             res.sendStatus(500);
@@ -224,7 +226,7 @@ class Handler {
             await this.#orderService.ClearOrder(parseInt(id));
             await this.#authService.ToggleBan(id);
             const email = req.query.email === "" ? undefined : req.query.email;
-            const bans = await this.#authService.BanList(email);
+            const bans = await this.#authService.BanList({page: 0, email});
             res.render("components/ban_list", {bans, email});
         } catch (err) {
             return res.sendStatus(400);

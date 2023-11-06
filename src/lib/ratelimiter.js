@@ -1,3 +1,5 @@
+const {ErrTooManyReq} = require("../domain/error");
+
 class Mutex {
     queue = [];
 
@@ -22,10 +24,12 @@ class Mutex {
 class User {
     id;
     nRequest;
+    born;
 
     constructor(id) {
         this.id = id;
         this.nRequest = 0;
+        this.born = new Date();
     }
 }
 
@@ -61,8 +65,14 @@ class Ratelimiter {
         const user = await this.checkUser(req.user.id)
             .then(user => user || this.addUser(req.user.id));
         this.mutex.Unlock();
+        user.nRequest += 1;
         if (user.nRequest > this.limit) {
-            return res.sendStatus(429);
+            const retryAfter = new Date();
+            retryAfter.setSeconds(user.born.getSeconds() + 60);
+            if (req.query["init-slot"] !== "1") {
+                res.header("Retry-After", retryAfter).status(429);
+                req.error = new ErrTooManyReq(retryAfter);
+            }
         }
         next();
     }
