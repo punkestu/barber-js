@@ -1,16 +1,17 @@
 <!doctype html>
 <html lang="en">
-<%- include("./components/head.ejs")%>
+<%- include("./components/head.ejs", {title: 'Order'})%>
 <body class="bg-[#001058] relative">
 <%- include("./components/header.ejs")%>
-<main class="mx-10 lg:mx-36 mb-8" hx-get="/schedule?day=<%=day%>" hx-target="#schedules-slot" hx-trigger="load">
+<main class="mx-10 lg:mx-36 mb-8" hx-get="/schedule?day=<%=day%>" hx-target="#schedules-slot" hx-trigger="load" hx-include="[name='init-slot']">
     <section class="flex flex-col items-center">
         <h1 class="font-medium text-[#001058] bg-[#FFBF1B] rounded-2xl px-6 py-3 text-3xl text-center">Lihat Jadwal</h1>
         <%- include("./components/day_cursor.ejs")%>
     </section>
     <form method="post" action="/app/order" class="flex flex-col items-center">
-        <div id="schedules-slot" class="py-2">
-            <%- include("./components/loading.ejs") %>
+        <div id="schedules-slot" class="py-2 flex flex-col items-center">
+            <input type="hidden" name="init-slot" value="1">
+            <p class="my-4 text-[#FFBF1B] font-medium text-xl">Loading ...</p>
         </div>
         <button type="submit" class="mt-4 bg-[#FFBF1B] px-4 py-2 rounded-xl font-black text-3xl" id="confirm_jadwal">Konfirmasi Jadwal</button>
     </form>

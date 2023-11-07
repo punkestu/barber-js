@@ -47,8 +47,8 @@ class Auth {
         return await this.#personRepo.Save(person);
     }
 
-    async BanList(email) {
-        return await this.#personRepo.Load({banned: true, email});
+    async BanList({page, email}) {
+        return await this.#personRepo.LoadBanned({email, start: page * 10, limit: 10});
     }
 }
 

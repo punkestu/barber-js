@@ -21,12 +21,13 @@ class Order {
             throw new ErrSchedule("was passed");
         }
         const order = await this.#repo.Ordered({date, barber_id});
-        if(order){
+        if (order) {
             this.#mutex.Unlock();
             throw new ErrSchedule("was ordered");
         }
         const newOrder = await this.#repo.Save(new OrderM({client_id, barber_id, date}));
         this.#mutex.Unlock();
+        this.#barberRepo.CacheLoadByBarber({day: schedule.shift.day}).then();
         return newOrder;
     }
 
@@ -51,8 +52,8 @@ class Order {
         return this.#repo.ClearMy(client_id);
     }
 
-    async GetForAdmin({id}) {
-        return this.#repo.LoadForAdmin({id});
+    async GetForAdmin({id}, {page}) {
+        return this.#repo.LoadForAdmin({id}, {start: page * 10, limit: 10});
     }
 }
 

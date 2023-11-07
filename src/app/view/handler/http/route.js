@@ -1,15 +1,17 @@
+const tmr = require("../../../../middleware/tooManyReq");
+
 module.exports = function (handler, authMid, rateLimiter) {
     const router = require("express").Router();
 
-    router.get("/admin/orders", authMid.isAuth({view: false}), rateLimiter.expressMid, authMid.isRole({
+    router.get("/admin/orders", authMid.isAuth({view: false}), rateLimiter.expressMid, tmr.order, authMid.isRole({
         view: false,
         role: "ADMIN"
     }), handler.GetOrders);
-    router.get("/admin/ban-list", authMid.isAuth({view: false}), rateLimiter.expressMid, authMid.isRole({
+    router.get("/admin/ban-list", authMid.isAuth({view: false}), rateLimiter.expressMid, tmr.banned, authMid.isRole({
         view: false,
         role: "ADMIN"
     }), handler.GetBanList);
-    router.get("/schedule", authMid.isAuth({view: false}), rateLimiter.expressMid, handler.GetSchedule);
+    router.get("/schedule", authMid.isAuth({view: false}), rateLimiter.expressMid, tmr.schedules, handler.GetSchedule);
 
     router.get("/login", authMid.isAuth({view: true, negate: true}), handler.Login);
     router.get("/register", authMid.isAuth({view: true, negate: true}), handler.Register);

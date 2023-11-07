@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include("./components/head.ejs") %>
+<%- include("./components/head.ejs", {title: 'Home'}) %>
 <body class="bg-[#001058]">
 <%- include("./components/header.ejs") %>
-<main class="mx-8 md:mx-36" hx-get="/schedule?day=<%=day%>" hx-target="#schedules-slot" hx-trigger="load">
+<main class="mx-8 md:mx-36" hx-get="/schedule?day=<%=day%>" hx-target="#schedules-slot" hx-trigger="load" hx-include="[name='init-slot']">
     <section class="flex flex-col-reverse md:flex-row justify-center items-center py-14 gap-14 md:gap-8 lg:gap-28">
         <aside class="flex flex-col items-center md:items-start gap-6">
             <div class="text-center md:text-left">
@@ -19,8 +19,9 @@
         <h1 class="font-medium text-[#001058] bg-[#FFBF1B] rounded-2xl px-6 py-3 text-3xl">Lihat Jadwal</h1>
         <%- include("./components/day_cursor.ejs") %>
     </section>
-    <div id="schedules-slot" class="flex justify-center pt-5">
-        <%- include("./components/loading.ejs") %>
+    <div id="schedules-slot" class="py-2 flex flex-col items-center">
+        <input type="hidden" name="init-slot" value="1">
+        <p class="my-4 text-[#FFBF1B] font-medium text-xl">Loading ...</p>
     </div>
     <section class="flex flex-col-reverse lg:flex-row justify-between border-8 rounded-3xl my-10 bg-[#3155FF] pt-4 px-4 md:px-0 gap-4 md:gap-0">
         <img src="/public/illustration2.png" alt="">

@@ -11,4 +11,12 @@ class ErrSchedule extends Error{
     }
 }
 
-module.exports = {ErrNotFound, ErrSchedule};
+class ErrTooManyReq extends Error {
+    retryAfter;
+    constructor(retryAfter) {
+        super("too many request");
+        this.retryAfter = retryAfter;
+    }
+}
+
+module.exports = {ErrNotFound, ErrSchedule, ErrTooManyReq};
