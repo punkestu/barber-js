@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<%- include("./components/head.ejs") %>
+<%- include("./components/head.ejs", {title: 'Ban List'}) %>
 <body class="bg-[#001058]" hx-get="/admin/ban-list" hx-swap="outerHTML" hx-target="#ban-list-slot" hx-trigger="load" hx-include="[name='init-slot']">
 <%- include("./components/header.ejs") %>
 <main class="py-4">

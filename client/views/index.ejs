@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include("./components/head.ejs") %>
+<%- include("./components/head.ejs", {title: 'Home'}) %>
 <body class="bg-[#001058]">
 <%- include("./components/header.ejs") %>
 <main class="mx-8 md:mx-36" hx-get="/schedule?day=<%=day%>" hx-target="#schedules-slot" hx-trigger="load" hx-include="[name='init-slot']">
