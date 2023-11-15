@@ -56,7 +56,7 @@ class Order {
 
     async LoadForAdmin({id}, {start, limit}) {
         if (typeof id !== 'undefined') {
-            return this.#cacheMem.LoadForAdmin.filter(c => c.id === id).slice(start, limit);
+            return this.#cacheMem.LoadForAdmin.filter(c => c.id === parseInt(id)).slice(start, limit);
         }
         return this.#cacheMem.LoadForAdmin.slice(start, limit);
     }

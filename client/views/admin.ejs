@@ -6,7 +6,7 @@
 <main class="py-4">
     <section class="mb-2 mx-1 flex justify-end">
         <input type="text" class="px-2 py-1" placeholder="#Cari ID Pesanan" name="id" hx-get="/admin/orders"
-               hx-include="[name='id']" hx-swap="outerHTML" hx-target="#orders-slot" hx-trigger="keyup">
+               hx-include="[name='id']" hx-swap="outerHTML" hx-vars="state:'search'" hx-target="#orders-slot" hx-trigger="keyup">
     </section>
     <section id="orders-slot" class="py-2 flex flex-col items-center">
         <input type="hidden" name="init-slot" value="1">

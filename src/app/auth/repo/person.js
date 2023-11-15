@@ -68,7 +68,7 @@ class Repo {
 
     async LoadBanned({email, start, limit}) {
         if (typeof email !== 'undefined') {
-            return this.#cacheMem.LoadBanned.filter(c => c.email === email);
+            return this.#cacheMem.LoadBanned.filter(c => c.email.includes(email));
         }
         return this.#cacheMem.LoadBanned.slice(start, limit);
     }

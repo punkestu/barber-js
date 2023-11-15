@@ -61,17 +61,19 @@ class Ratelimiter {
     }
 
     expressMid = async (req, res, next) => {
-        await this.mutex.Lock();
-        const user = await this.checkUser(req.user.id)
+        if(req.query.state !== "search"){
+            await this.mutex.Lock();
+            const user = await this.checkUser(req.user.id)
             .then(user => user || this.addUser(req.user.id));
-        this.mutex.Unlock();
-        user.nRequest += 1;
-        if (user.nRequest > this.limit) {
-            const retryAfter = new Date();
-            retryAfter.setSeconds(user.born.getSeconds() + 60);
-            if (req.query["init-slot"] !== "1") {
-                res.header("Retry-After", retryAfter).status(429);
-                req.error = new ErrTooManyReq(retryAfter);
+            this.mutex.Unlock();
+            user.nRequest += 1;
+            if (user.nRequest > this.limit) {
+                const retryAfter = new Date();
+                retryAfter.setSeconds(user.born.getSeconds() + 60);
+                if (req.query["init-slot"] !== "1") {
+                    res.header("Retry-After", retryAfter).status(429);
+                    req.error = new ErrTooManyReq(retryAfter);
+                }
             }
         }
         next();

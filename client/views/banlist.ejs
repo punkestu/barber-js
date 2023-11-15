@@ -6,7 +6,7 @@
 <main class="py-4">
     <section class="mb-2 mx-1 flex justify-end">
         <input type="email" class="px-2 py-1" placeholder="#Cari Email Pengguna" name="email" hx-get="/admin/ban-list"
-               hx-include="[name='email']" hx-swap="outerHTML" hx-target="#ban-list-slot" hx-trigger="keyup">
+               hx-include="[name='email']" hx-vars="state:'search'" hx-swap="outerHTML" hx-target="#ban-list-slot" hx-trigger="keyup">
     </section>
     <section id="ban-list-slot" class="py-2 flex flex-col items-center">
         <input type="hidden" name="init-slot" value="1">
