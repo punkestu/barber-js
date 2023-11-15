@@ -44,7 +44,9 @@ class Auth {
     async ToggleBan(id) {
         const person = await this.#personRepo.LoadOne({id});
         person.banned = !person.banned;
-        return await this.#personRepo.Save(person);
+        const toggled = await this.#personRepo.Save(person);
+        this.#personRepo.CacheLoadBanned().then();
+        return toggled;
     }
 
     async BanList({page, email}) {

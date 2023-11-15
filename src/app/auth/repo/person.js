@@ -53,7 +53,7 @@ class Repo {
             .then(person => person ? new Person(person) : null);
     }
 
-    async Load({id, name, email, role, banned}, {start, limit}, op = "AND") {
+    async Load({id, name, email, role, banned}, op = "AND") {
         return db.Query(`SELECT pi.*, p.* FROM Person p LEFT JOIN PersonInfo pi ON (p.id=pi.person_id) ${db.UseWhere({
             id, name, email, role, banned
         })} ${db.Wheres({
@@ -62,7 +62,7 @@ class Repo {
             email,
             role,
             banned
-        }, op)} ${typeof limit !== 'undefined' ? "LIMIT ?" : ""} ${typeof start !== 'undefined' ? "OFFSET ?" : ""}`, [limit, start].filter(c => typeof c !== 'undefined'))
+        }, op)}`)
             .then(persons => persons.map(person => new Person(person)));
     }
 
