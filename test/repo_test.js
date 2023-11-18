@@ -1,7 +1,12 @@
-const {Person} = require("../src/domain/person");
-const prisma = require("../src/lib/prisma");
-const repo = new (require("../src/app/auth/repo/person"))(prisma);
+require("dotenv").config();
+const db = require("../src/lib/db");
+db.Init({
+    host     : process.env.DB_HOST || 'localhost',
+    user     : process.env.DB_USERNAME,
+    password : process.env.DB_PASSWORD,
+    database : process.env.DB_NAME
+});
 
-// const person = new Person({name: "bima", email: "bima", password: "bima", role: "client"});
-// repo.Save(person).then(res=>console.log(res));
-repo.LoadByID(4).then(res=>console.log(res));
+const userRepo = new (require("../src/app/auth/repo/person"))();
+
+userRepo.Load({}, {start: 1, limit: 1}).then(res=>console.log(res));

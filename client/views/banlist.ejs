@@ -1,14 +1,14 @@
 <!doctype html>
 <html lang="en">
-<%- include("./components/head.ejs", {title: 'Admin'}) %>
-<body class="bg-[#001058]" hx-get="/admin/orders" hx-swap="outerHTML" hx-target="#orders-slot" hx-trigger="load" hx-include="[name='init-slot']">
+<%- include("./components/head.ejs", {title: 'Ban List'}) %>
+<body class="bg-[#001058]" hx-get="/admin/ban-list" hx-swap="outerHTML" hx-target="#ban-list-slot" hx-trigger="load" hx-include="[name='init-slot']">
 <%- include("./components/header.ejs") %>
 <main class="py-4">
     <section class="mb-2 mx-1 flex justify-end">
-        <input type="text" class="px-2 py-1" placeholder="#Cari ID Pesanan" name="id" hx-get="/admin/orders"
-               hx-include="[name='id']" hx-swap="outerHTML" hx-vars="state:'search'" hx-target="#orders-slot" hx-trigger="keyup">
+        <input type="email" class="px-2 py-1" placeholder="#Cari Email Pengguna" name="email" hx-get="/admin/ban-list"
+               hx-include="[name='email']" hx-vars="state:'search'" hx-swap="outerHTML" hx-target="#ban-list-slot" hx-trigger="keyup">
     </section>
-    <section id="orders-slot" class="py-2 flex flex-col items-center">
+    <section id="ban-list-slot" class="py-2 flex flex-col items-center">
         <input type="hidden" name="init-slot" value="1">
         <p class="my-4 text-[#FFBF1B] font-medium text-xl">Loading ...</p>
     </section>

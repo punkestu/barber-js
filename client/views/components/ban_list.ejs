@@ -1,0 +1,20 @@
+<section id="ban-list-slot" class="flex flex-wrap" hx-get="/admin/ban-list?email=<%= email %>" hx-swap="outerHTML" hx-target="this" hx-trigger="every 6s">
+    <% bans.forEach(ban=>{ %>
+        <div class="w-full sm:w-1/2 md:w-1/3 xl:w-1/6 px-4 py-2 sm:p-1">
+            <div class="bg-[#FFBF1B] p-2">
+                <%= ban.id%>
+                <h3 class="text-center font-bold text-2xl text-red-600">BANNED</h3>
+                <h2 class="text-right mt-3 font-bold text-2xl"><%= ban.name %></h2>
+                <h3 class="font-bold text-lg text-right mb-3"><%= ban.email %></h3>
+                <div class="flex gap-2">
+                    <button class="bg-green-500 text-white px-6 py-2 rounded-xl flex-grow"
+                            hx-get="/admin/white/<%= ban.id %>?email=<%= email %>"
+                            hx-target="#ban-list-slot"
+                            hx-swap="outerHTML"
+                            hx-trigger="click">Open
+                    </button>
+                </div>
+            </div>
+        </div>
+    <% }); %>
+</section>

@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<%- include("./components/head.ejs")%>
+<%- include("./components/head.ejs", {title: 'Ticket'})%>
 <body class="bg-[#001058]">
 <%- include("./components/header.ejs")%>
 <main class="flex flex-col items-center mx-4 md:mx-24 lg:mx-36">
@@ -14,16 +14,15 @@
         <div class="w-full md:px-16 text-slate-700 flex flex-col gap-2">
             <p class="flex justify-between">Nomor Pemesanan<span class="font-semibold text-right"><%= ticket.id%></span></p>
             <p class="flex justify-between">Nama Lengkap<span class="font-semibold text-right"><%= ticket.client.name%></span></p>
-            <p class="flex justify-between">Alamat<span class="font-semibold text-right">Jl. Jambu 1 no. 67, Sumbersari, Jember</span></p>
-            <p class="flex justify-between">Jenis Kelamin<span class="font-semibold text-right">Laki-laki</span></p>
-            <p class="flex justify-between">Usia<span class="font-semibold text-right">22 Tahun</span></p>
-            <p class="flex justify-between">Jadwal<span class="font-semibold text-right"><%= ticket.date.toLocaleDateString('id-ID', {day: "2-digit", month: 'long', year: "numeric"})%> | <%= ticket.barber.shift.start.toLocaleTimeString('id-ID', {hour12: false}).slice(0,5)%></span></p>
-            <p class="flex justify-between">Kapster<span class="font-semibold text-right"><%= ticket.barber.barber.name%></span></p>
+            <p class="flex justify-between">Alamat<span class="font-semibold text-right"><%= ticket.client.alamat%></span></p>
+            <p class="flex justify-between">Jenis Kelamin<span class="font-semibold text-right"><%= ticket.client.gender%></span></p>
+            <p class="flex justify-between">Jadwal<span class="font-semibold text-right"><%= ticket.date.toLocaleDateString('id-ID', {day: "2-digit", month: 'long', year: "numeric"})%> | <%= ticket.shift.start.toLocaleTimeString('id-ID', {hour12: false}).slice(0,5)%></span></p>
+            <p class="flex justify-between">Kapster<span class="font-semibold text-right"><%= ticket.barber.name%></span></p>
         </div>
         <div class="w-full border-2 border-slate-500 border-dashed my-4"></div>
         <div class="text-[#FF1D1D] flex flex-col items-center">
             <p>Waktu pangkas</p>
-            <h1 class="font-black text-5xl text-[#AC2A2A]"><%= ticket.barber.shift.start.toLocaleTimeString('id-ID', {hour12: false}).slice(0,5)%></h1>
+            <h1 class="font-black text-5xl text-[#AC2A2A]"><%= ticket.shift.start.toLocaleTimeString('id-ID', {hour12: false}).slice(0,5)%></h1>
             <p class="font-semibold"><%= ticket.date.toLocaleDateString('id-ID', {day: "2-digit", weekday:"long", month: 'long', year: "numeric"})%></p>
         </div>
     </section>

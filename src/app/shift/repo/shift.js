@@ -1,71 +1,49 @@
-const Prisma = require("../../../lib/prisma");
-const Shift = require("../../../domain/shift");
-const {shift: db} = require("../../../lib/prisma");
+const db = require("../../../lib/db");
+const ShiftM = require("../../../domain/shift");
 
-class Repo {
+class Shift {
     async Save(shift) {
-        let savedShift;
         if (typeof shift.id === 'undefined') {
-            savedShift = await Prisma.shift.create({
-                data: shift
-            });
-        } else {
-            savedShift = await Prisma.shift.update({
-                data: {
-                    ...shift,
-                    id: undefined
-                },
-                where: {id: shift.id}
-            });
+            return db.Insert("Shift", {
+                start: shift.start,
+                end: shift.end,
+                day: shift.day
+            }).then(newShift => new ShiftM(newShift));
         }
-        return new Shift(savedShift);
+        await db.Update("Shift", {
+            start: shift.start,
+            end: shift.end,
+            day: shift.day
+        }, db.Where("id", shift.id));
+        return shift;
     }
 
-    async LoadOne({id, start, day}, op = null){
-        let shift;
-        if (op === "AND" || !op) {
-            shift = await db.findFirst({
-                where: {
-                    AND: [{id}, {start}, {day}]
-                }
-            });
-        } else {
-            shift = await db.findFirst({
-                where: {
-                    OR: [{id}, {start}, {day}]
-                }
-            });
-        }
-        return shift ? new Shift(shift) : null;
+    async LoadOne({id, start, day}, op = "AND") {
+        return db.QueryOne(`SELECT * FROM Shift ${db.UseWhere({id, start, day})} ${db.Wheres({
+            id, start, day
+        }, op)}`, [id, start, day])
+            .then(shift => new ShiftM(shift));
     }
 
     async Load({id, start, day}, op = null) {
-        if (op === 'AND' || op === null) {
-            return (await Prisma.shift.findMany({
-                where: {AND: [{id}, {start}, {day}]}
-            })).map(shift => new Shift(shift));
-        } else if (op === 'OR') {
-            return (await Prisma.shift.findMany({
-                where: {OR: [{id}, {start}, {day}]}
-            })).map(shift => new Shift(shift));
-        }
+        return db.Query(`SELECT * FROM Shift ${db.UseWhere({id, start, day})} ${db.Wheres({
+            id, start, day
+        }, op)}`, [id, start, day])
+            .then(shifts => shifts.map(shift => new ShiftM(shift)));
     }
 
     async IsConflict({id, start, end, day}) {
-        if (id) {
-            return (await Prisma.$queryRaw`SELECT * FROM Shift WHERE day=${day} 
-            AND id!=${id}
-            AND (${start} < end AND ${end} > start)`)[0];
+        if (typeof id === 'undefined') {
+            return db.QueryOne(`SELECT * FROM Shift WHERE day=? AND id!=? AND (? < end AND ? > ${"start"})`, [day, id, end, start])
+                .then(shift => new ShiftM(shift));
         }
-        return (await Prisma.$queryRaw`SELECT * FROM Shift WHERE day=${day} 
-            AND (${start} < end AND ${end} > start)`)[0];
+        return db.QueryOne(`SELECT * FROM Shift WHERE day=? AND (? < end AND ? > ${"start"})`, [day, id, end, start])
+            .then(shift => new ShiftM(shift));
     }
 
     async Delete(id) {
-        return Prisma.shift.delete({
-            where: {id}
-        });
+        return db.Delete("Shift", db.Where("id", id));
     }
 }
 
-module.exports = Repo;
+module.exports = Shift;

@@ -1,1 +1,1 @@
-<%= `${time.toLocaleTimeString('id-ID', {hour12: false}).split(".").slice(0,2).join(":")}` %>
+<%= `${new Date(`2000-01-01T${time}.000Z`).toLocaleTimeString('id-ID', {hour12: false}).split(".").slice(0,2).join(":")}` %>
