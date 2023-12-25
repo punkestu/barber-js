@@ -21,7 +21,7 @@ const shift = require("../src/app/shift")(authMid);
 const barber = require("../src/app/barber")(auth.repo, shift.repo, authMid);
 const order = require("../src/app/order")(barber.repo, authMid);
 
-const view = require("../src/app/view")(barber.repo, auth.service, order.service, authMid, rateLimiter);
+const view = require("../src/app/view")(barber.repo, auth.service, order.service, shift.usecase, authMid, rateLimiter);
 app.use("/", view.http);
 
 app.listen(process.env.PORT || 3000);

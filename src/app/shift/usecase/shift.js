@@ -9,6 +9,10 @@ class Service {
         this.#repo = repo;
     }
 
+    async GetShiftByDay(day) {
+        return this.#repo.Load({day});
+    }
+
     async CreateShift(start, end, day) {
         const validation = new Validator(
             {start, end},

@@ -79,6 +79,10 @@ class Barber {
         }
     }
 
+    async LoadBarbers() {
+        return db.Query(`SELECT * FROM Person WHERE role=?`, ["BARBER"]);
+    }
+
     async LoadOne({id, shift_id, barber_id, active}, op = "AND") {
         return db.QueryOne(`SELECT ${"b.*, s.start, s.day"} ${"FROM Barber b"} ${"JOIN Shift s ON (s.id=b.shift_id)"} WHERE ${db.Wheres({
             "b.id": id, shift_id, barber_id, active

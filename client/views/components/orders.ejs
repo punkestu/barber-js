@@ -6,6 +6,7 @@
                 <h3 id="order-state-<%= order.id %>"
                     class="text-center font-bold text-2xl <% if(order.state === "ORDERED"){ %>text-green-600<% }else if(order.state === "EXPIRED"){ %>text-red-600<% } %>"><%= order.state %></h3>
                 <h2 class="text-right mt-3 font-bold text-xl"><%= order.client.name %></h2>
+                <h2 class="text-right text-lg"><%= order.client.nohp %></h2>
                 <h3 class="text-right"><%= order.date.toLocaleDateString("id-ID", {
                         day: "2-digit",
                         month: "long",

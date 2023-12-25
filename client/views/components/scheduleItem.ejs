@@ -1,0 +1,4 @@
+<div class="px-2 py-1 border-2 rounded-2xl flex items-center gap-2">
+    <%- include("../helper/time_format.ejs", {time: start})%>
+    <button hx-trigger="click" hx-delete="/admin/schedule/<%= id%>" hx-target="closest div" hx-swap="outerHTML">X</button>
+</div>

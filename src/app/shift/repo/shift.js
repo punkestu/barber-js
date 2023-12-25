@@ -35,13 +35,15 @@ class Shift {
     async IsConflict({id, start, end, day}) {
         if (typeof id === 'undefined') {
             return db.QueryOne(`SELECT * FROM Shift WHERE day=? AND id!=? AND (? < end AND ? > ${"start"})`, [day, id, end, start])
-                .then(shift => new ShiftM(shift));
+                .then(shift => shift ? new ShiftM(shift) : null);
         }
         return db.QueryOne(`SELECT * FROM Shift WHERE day=? AND (? < end AND ? > ${"start"})`, [day, id, end, start])
             .then(shift => new ShiftM(shift));
     }
 
     async Delete(id) {
+        await db.Query("DELETE FROM `Order` WHERE `Order`.barber_id IN (SELECT b.id FROM Barber b WHERE b.shift_id = ?)", [id]);
+        await db.Delete("Barber", db.Where("shift_id", id));
         return db.Delete("Shift", db.Where("id", id));
     }
 }

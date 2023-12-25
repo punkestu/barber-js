@@ -1,10 +1,3 @@
-const DAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-const ShiftM = require("../src/domain/shift");
-const ShiftR = new (require("../src/app/shift/repo/shift"))();
-const BarberM = require("../src/domain/barber");
-const BarberR = new (require("../src/app/barber/repo/barber"))();
-const PersonR = new (require("../src/app/auth/repo/person"))();
-
 require("dotenv").config();
 require("../src/lib/db").Init({
     host     : process.env.DB_HOST || 'localhost',
@@ -12,6 +5,13 @@ require("../src/lib/db").Init({
     password : process.env.DB_PASSWORD,
     database : process.env.DB_NAME
 });
+
+const DAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+const ShiftM = require("../src/domain/shift");
+const ShiftR = new (require("../src/app/shift/repo/shift"))();
+const BarberM = require("../src/domain/barber");
+const BarberR = new (require("../src/app/barber/repo/barber"))();
+const PersonR = new (require("../src/app/auth/repo/person"))();
 
 function toTime(time) {
     return new Date("1970-01-01T" + time);
