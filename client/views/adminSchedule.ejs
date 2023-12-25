@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<%- include("./components/head.ejs", {title: 'Order'}) %>
+<body class="bg-[#001058] relative">
+<%- include("./components/header.ejs") %>
+<main class="mx-10 lg:mx-36 mb-8">
+    <div class="flex flex-col gap-2 h-[80vh] bg-white rounded-lg px-6 py-4">
+        <div class="min-h-[10%] flex items-end justify-between">
+            <div>
+                <a href="?day=SUN" class="underline<%= day === "SUN" ? " text-blue-500" : "" %>">Minggu</a>
+                <a href="?day=MON" class="underline<%= day === "MON" ? " text-blue-500" : "" %>">Senin</a>
+                <a href="?day=TUE" class="underline<%= day === "TUE" ? " text-blue-500" : "" %>">Selasa</a>
+                <a href="?day=WED" class="underline<%= day === "WED" ? " text-blue-500" : "" %>">Rabu</a>
+                <a href="?day=THU" class="underline<%= day === "THU" ? " text-blue-500" : "" %>">Kamis</a>
+                <a href="?day=FRI" class="underline<%= day === "FRI" ? " text-blue-500" : "" %>">Jumat</a>
+                <a href="?day=SAT" class="underline<%= day === "SAT" ? " text-blue-500" : "" %>">Sabtu</a>
+            </div>
+            <form>
+                <h2 class="font-bold">Tambahkan Jadwal</h2>
+                <select name="day" id="day" class="px-2 py-2">
+                    <option value="SUN">Minggu</option>
+                    <option value="MON">Senin</option>
+                    <option value="TUE">Selasa</option>
+                    <option value="WED">Rabu</option>
+                    <option value="THU">Kamis</option>
+                    <option value="FRI">Jumat</option>
+                    <option value="SAT">Sabtu</option>
+                </select>
+                <select name="jam" id="jam" class="px-2 py-2">
+                    <% for(let i = 0; i < 24; i++){ %>
+                        <option value="<%= i < 10 ? `0${i}` : i %>:00"><%= i < 10 ? `0${i}` : i %>:00</option>
+                        <option value="<%= i < 10 ? `0${i}` : i %>:30"><%= i < 10 ? `0${i}` : i %>:30</option>
+                    <% } %>
+                </select>
+                <button type="button" class="bg-blue-500 text-white px-2 py-2 rounded-lg" hx-trigger="click" hx-post="/admin/schedule?day=<%=day%>" hx-include="[name='jam'],[name='day']" hx-target="#schedules" hx-swap="beforeend">Tambahkan</button>
+            </form>
+        </div>
+        <div class="h-[90%] overflow-y-scroll rounded-xl items-start border-2 p-2">
+            <div class="flex flex-wrap gap-2" id="schedules">
+                <%schedules.forEach(schedule=>{%>
+                    <%- include("./components/scheduleItem.ejs", {start: schedule.start, id: schedule.id})%>
+                <%})%>
+            </div>
+        </div>
+    </div>
+</main>
+<%- include("./components/footer.ejs") %>
+<script src="https://unpkg.com/htmx.org@1.9.6"
+        integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni"
+        crossorigin="anonymous"></script>
+</body>
+</html>

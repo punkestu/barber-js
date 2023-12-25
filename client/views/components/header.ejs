@@ -5,6 +5,7 @@
             <a <%if(active==="home"){%>class="font-black"<%}%> href="/">Beranda</a>
             <%if(state === "admin"){%>
             <a <%if(active==="banlist"){%>class="font-black"<%}%> href="/ban-list">Banned</a>
+            <a <%if(active==="adminSchedule"){%>class="font-black"<%}%> href="/admin-schedule">Jadwal</a>
             <%}else{%>
             <a <%if(active==="ticket"){%>class="font-black"<%}%> href="/ticket">Tiket</a>
             <%}%>

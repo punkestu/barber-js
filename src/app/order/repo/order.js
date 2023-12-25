@@ -64,11 +64,11 @@ class Order {
     async CacheLoadForAdmin() {
         const today = new Date();
         today.setHours(0, 0, 0);
-        this.#cacheMem.LoadForAdmin = await db.Query(`SELECT o.*, p.name, p.email FROM ${"`Order`"} o ${"JOIN Person p ON (p.id=o.client_id)"} WHERE o.${"`date`"}>=? ORDER BY o.state, o.${"`date`"}`, [today].filter(c => typeof c !== 'undefined'))
+        this.#cacheMem.LoadForAdmin = await db.Query(`SELECT o.*, p.name, p.email, pi.nohp FROM ${"`Order`"} o ${"JOIN Person p ON (p.id=o.client_id)"} ${"JOIN PersonInfo pi ON (o.client_id=pi.person_id)"} WHERE o.${"`date`"}>=? ORDER BY o.state, o.${"`date`"}`, [today].filter(c => typeof c !== 'undefined'))
             .then(orders => orders.map(
                 order => new OrderM({
                     ...order,
-                    client: new PersonM({name: order.name, email: order.email})
+                    client: new PersonM({name: order.name, email: order.email, nohp: order.nohp})
                 })
             ));
     }

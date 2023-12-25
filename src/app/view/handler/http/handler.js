@@ -7,11 +7,13 @@ class Handler {
     #service;
     #authService;
     #orderService;
+    #shiftService;
 
-    constructor(service, authService, orderService) {
+    constructor(service, authService, orderService, shiftService) {
         this.#service = service;
         this.#authService = authService;
         this.#orderService = orderService;
+        this.#shiftService = shiftService;
     }
 
     Index = async (req, res) => {
@@ -172,6 +174,20 @@ class Handler {
         }
     }
 
+    AdminSchedule = async (req, res) => {
+        try {
+            const schedules = await this.#shiftService.GetShiftByDay(req.query.day || "SUN");
+            res.render("adminSchedule", {
+                active: "adminSchedule",
+                state: "admin",
+                day: req.query.day || "SUN",
+                schedules
+            });
+        } catch (err) {
+            res.sendStatus(500);
+        }
+    }
+
     GetOrders = async (req, res) => {
         try {
             const id = req.query.id === "" ? undefined : req.query.id;
@@ -244,6 +260,48 @@ class Handler {
             res.status(500).json(err);
         }
     }
+
+    DeleteSchedule = async (req, res) => {
+        try {
+            await this.#shiftService.DeleteShift(req.params.id);
+            await this.#service.SyncSchedule();
+            res.send("");
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    }
+    CreateSchedule = async (req, res) => {
+        try {
+            const jam = (24 + parseInt(req.body.jam.split(":")[0]) - 7) % 24;
+            const start = `${jam < 10 ? `0${jam}` : jam}:${req.body.jam.split(":")[1]}:00`;
+            const end = [
+                req.body.jam.split(":")[1] === "00" ?
+                    (jam < 10 ? `0${jam}` : jam) :
+                    (jam < 10 ? `0${jam}` : jam),
+                req.body.jam.split(":")[1] === "00" ? "30" : "00",
+                "00"
+            ].join(":");
+            const shift = await this.#shiftService.CreateShift(toTime(start), toTime(end), req.body.day);
+            if(!shift) {
+                throw new Error("failed to create shift");
+            }
+            await this.#service.CreateSchedule(shift.id);
+            await this.#service.SyncSchedule();
+            if (req.query.day === req.body.day) {
+                return res.render("components/scheduleItem", {
+                    start: start,
+                    id: 1
+                });
+            }
+            return res.send("");
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    }
+}
+
+function toTime(time) {
+    return new Date("1970-01-01T" + time);
 }
 
 module.exports = Handler;
